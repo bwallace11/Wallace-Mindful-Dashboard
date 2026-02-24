@@ -3,6 +3,10 @@ import { initDate } from './date.js';
 import { calculateAgeOf } from './calculateAgeOf.js';
 import { getDaysUntilEvent } from './daysTillEvent.js';
 import { getDayStreak } from './streakOfDays.js';
+import { initRain } from './rain.js';
+
+// Background rain
+initRain();
 
 // Clock
 initClock();
@@ -10,18 +14,18 @@ initClock();
 // Date
 initDate();
 
-// Age of Person
-const ageOfPerson = calculateAgeOf("2000-01-01");
+// Anniversary
 const elemAge = document.querySelector('.ageOfPerson');
-elemAge.textContent = ageOfPerson;
-elemAge.setAttribute("datetime", ageOfPerson);
+const ageVal = calculateAgeOf('2022-04-20');
+elemAge.textContent = ageVal;
+elemAge.setAttribute('datetime', ageVal);
 
 // Days Until Graduation
-const daysUntil = getDaysUntilEvent("2026-06-15");
 const elemEvent = document.querySelector('.daysUntilEvent');
-elemEvent.textContent = daysUntil;
+const daysVal = getDaysUntilEvent('2026-06-15');
+elemEvent.textContent = daysVal;
 
-// Streak of Days
-const streak = getDayStreak("2026-01-01");
+// Days Journaled
 const elemStreak = document.querySelector('.streakOfDays');
-elemStreak.textContent = streak;
+const streakVal = getDayStreak('2026-01-01');
+elemStreak.textContent = streakVal;

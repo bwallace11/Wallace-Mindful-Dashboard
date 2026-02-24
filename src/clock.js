@@ -1,21 +1,18 @@
 const theClockApp = () => {
-  const timeNow = new Date();
+  const now = new Date();
+  let h = now.getHours();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const pad = n => String(n).padStart(2, '0');
 
-  let gotHours = timeNow.getHours();
-  let gotMinutes = timeNow.getMinutes();
-  let gotSeconds = timeNow.getSeconds();
-  let gotAmOrPm = gotHours >= 12 ? "PM" : "AM";
-
-  gotHours = gotHours % 12 || 12;
-  gotHours = gotHours < 10 ? `0${gotHours}` : gotHours;
-  gotMinutes = gotMinutes < 10 ? `0${gotMinutes}` : gotMinutes;
-  gotSeconds = gotSeconds < 10 ? `0${gotSeconds}` : gotSeconds;
-
-  document.querySelector(".hours").textContent = gotHours;
-  document.querySelector(".minutes").textContent = gotMinutes;
-  document.querySelector(".seconds").textContent = gotSeconds;
-  document.querySelector(".amOrPm").textContent = gotAmOrPm;
-  document.querySelector(".time").setAttribute("datetime", timeNow);
+  document.querySelector('.hours').textContent = pad(h);
+  document.querySelector('.minutes').textContent = pad(now.getMinutes());
+  document.querySelector('.seconds').textContent = pad(now.getSeconds());
+  document.querySelector('.amOrPm').textContent = ampm;
+  document.querySelector('.time').setAttribute('datetime', now.toISOString());
 };
 
-export const initClock = () => setInterval(theClockApp, 1000);
+export const initClock = () => {
+  theClockApp();
+  setInterval(theClockApp, 1000);
+};

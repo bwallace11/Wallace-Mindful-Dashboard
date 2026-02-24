@@ -1,17 +1,19 @@
-const allTheMonths = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
-const allTheDays = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+
+const DAYS = [
+  'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+  'Thursday', 'Friday', 'Saturday'
 ];
 
 export const initDate = () => {
-  const dateNow = new Date();
+  const d = new Date();
 
-  document.querySelector(".month").textContent = allTheMonths[dateNow.getMonth()];
-  document.querySelector(".dayOfMonth").textContent = dateNow.getDate();
-  document.querySelector(".year").textContent = dateNow.getFullYear();
-  document.querySelector(".dayOfWeek").textContent = allTheDays[dateNow.getDay()];
-  document.querySelector(".date").setAttribute("datetime", dateNow);
+  document.querySelector('.month').textContent = MONTHS[d.getMonth()];
+  document.querySelector('.dayOfMonth').textContent = d.getDate();
+  document.querySelector('.year').textContent = d.getFullYear();
+  document.querySelector('.dayOfWeek').textContent = DAYS[d.getDay()];
+  document.querySelector('.date').setAttribute('datetime', d.toISOString());
 };

@@ -1,51 +1,81 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Peace Of Mind</title>
- 
-    <!-- Compiled CSS file -->
-     <link rel="stylesheet" href="/src/style.css">
-    <!-- Transpiled JS -->
-    <script src="/src/script.js" type="module" defer></script>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peace Of Mind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <script src="/src/script.js" type="module" defer></script>
+</head>
+<body>
 
-  </head>
+  <canvas id="rain"></canvas>
 
-<body class="min-h-screen flex justify-center items-center bg-gray-100">
+  <div class="hex-rings">
+    <svg width="900" height="900" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="leftHalf">
+          <rect x="0" y="0" width="250" height="500"/>
+        </clipPath>
+      </defs>
+      <polygon points="250,30 470,155 470,345 250,470 30,345 30,155" fill="none" stroke="rgba(196,181,253,0.28)" stroke-width="1.5" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+    </svg>
+  </div>
 
-    <main class="w-[90%] max-w-7xl grid grid-cols-3 gap-4">
+  <main>
+    <section class="card card-time" role="region" aria-label="Time">
+      <span class="label">Current Time</span>
+      <time class="time value">
+        <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
+      </time>
+    </section>
 
-        <section class="bg-white p-4 border" role="region" aria-label="Time">
-          <time class="time">
-            <span class="hours">HH</span>:<span class="minutes">MM</span>:<span class="seconds">SS</span>
-            <span class="amOrPm">AM/PM</span>
-          </time>
-        </section>
+    <section class="card card-date" role="region" aria-label="Date">
+      <span class="label">Today</span>
+      <time class="date value">
+        <span class="month">January</span> <span class="dayOfMonth">1</span>, <span class="year">2024</span>
+        <span class="dayOfWeek">Monday</span>
+      </time>
+    </section>
 
-        <section class="bg-white p-4 border" role="region" aria-label="Date">
-          <time class="date">
-            <span class="month">January</span>
-            <span class="dayOfMonth">29</span>,
-            <span class="year">2024</span> —
-            <span class="dayOfWeek">Monday</span>
-          </time>
-        </section>
+    <div class="card card-sq1"><span class="sq-icon">⟨/⟩</span><span class="sq-label">HTML</span></div>
+    <div class="card card-sq2"><span class="sq-icon">✦</span><span class="sq-label">CSS</span></div>
+    <div class="card card-sq3"><span class="sq-icon">λ</span><span class="sq-label">JS</span></div>
+    <div class="card card-sq4"><span class="sq-icon">◈</span><span class="sq-label">React</span></div>
+    <div class="card card-sq5"><span class="sq-icon">⬡</span><span class="sq-label">Node</span></div>
 
-        <section class="bg-white p-4 border" role="region" aria-label="Days until event">
-          <p>Days until Graduation: <time class="daysUntilEvent">000</time></p>
-        </section>
+    <section class="card card-grad" role="region" aria-label="Days until event">
+      <span class="label">Days Until Graduation</span>
+      <time class="daysUntilEvent stat-number">—</time>
+      <span class="stat-unit">days remaining</span>
+    </section>
 
-        <section class="bg-white p-4 border" role="region" aria-label="Streak">
-          <p>Streak: <time class="streakOfDays">000</time></p>
-        </section>
+    <section class="card card-streak" role="region" aria-label="Streak">
+      <span class="label">Days Journaled</span>
+      <time class="streakOfDays stat-number">—</time>
+      <span class="stat-unit">day streak</span>
+    </section>
 
-        <section class="bg-white p-4 border" role="region" aria-label="Age">
-          <p>Age: <time class="ageOfPerson">000</time></p>
-        </section>
+    <section class="card card-anniv" role="region" aria-label="Anniversary">
+      <span class="label">Anniversary</span>
+      <time class="ageOfPerson stat-number">—</time>
+      <span class="stat-unit">years</span>
+    </section>
+  </main>
 
-    </main>
-    
-  </body>
+</body>
 </html>
