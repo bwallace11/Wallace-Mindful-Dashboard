@@ -115,14 +115,43 @@
     <div class="modal-content">
       <h2>My Bookshelf</h2>
       <div class="book-grid">
-        <div class="book-card">The Night Circus</div>
-        <div class="book-card">Atomic Habits</div>
-        <div class="book-card">Dune</div>
-        <div class="book-card">The Hobbit</div>
-        <div class="book-card">The Silent Patient</div>
-        <div class="book-card">The Midnight Library</div>
-        <div class="book-card">Gone Girl</div>
-        <div class="book-card">The Martian</div>
+        <div class="book-card" data-book="night-circus">The Night Circus</div>
+        <div class="book-card" data-book="atomic-habits">Atomic Habits</div>
+        <div class="book-card" data-book="dune">Dune</div>
+        <div class="book-card" data-book="hobbit">The Hobbit</div>
+        <div class="book-card" data-book="silent-patient">The Silent Patient</div>
+        <div class="book-card" data-book="midnight-library">The Midnight Library</div>
+        <div class="book-card" data-book="gone-girl">Gone Girl</div>
+        <div class="book-card" data-book="martian">The Martian</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Detail Modal -->
+  <div class="book-detail-modal" id="bookDetailModal">
+    <div class="book-detail-content">
+      <button class="book-detail-close" id="bookDetailClose">✕</button>
+      <div class="book-detail-header">
+        <div class="book-cover" id="bookCover">📖</div>
+        <div class="book-meta">
+          <div class="book-detail-title" id="bookDetailTitle"></div>
+          <div class="book-detail-author" id="bookDetailAuthor"></div>
+          <div class="star-rating" id="starRating">
+            <span class="star" data-star="1">★</span>
+            <span class="star" data-star="2">★</span>
+            <span class="star" data-star="3">★</span>
+            <span class="star" data-star="4">★</span>
+            <span class="star" data-star="5">★</span>
+          </div>
+          <div class="book-link-wrap">
+            <input class="book-link-input" id="bookLinkInput" type="url" placeholder="Paste a link (Goodreads, Amazon…)" />
+            <button class="book-link-btn" id="bookLinkOpen">Open ↗</button>
+          </div>
+        </div>
+      </div>
+      <div class="book-summary">
+        <span class="book-summary-label">Summary</span>
+        <span id="bookSummaryText"></span>
       </div>
     </div>
   </div>
