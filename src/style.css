@@ -8,7 +8,6 @@
 /* ── Tokens ── */
 :root {
   --lavender: #c4b5fd;
-  --lavender-dim: rgba(196, 181, 253, 0.14);
   --lavender-border: rgba(220, 210, 255, 0.28);
   --glass-bg: rgba(196, 181, 253, 0.04);
   --glass-bg-hover: rgba(196, 181, 253, 0.08);
@@ -27,7 +26,7 @@ body {
   justify-content: center;
 }
 
-/* ── Hex ring effect ── */
+/* ── Hex rings ── */
 .hex-rings {
   position: fixed;
   inset: 0;
@@ -35,7 +34,6 @@ body {
   pointer-events: none;
   overflow: hidden;
 }
-
 .hex-rings svg {
   position: absolute;
   left: -52%;
@@ -44,7 +42,6 @@ body {
   width: 110vh;
   height: 110vh;
 }
-
 .hex-ring {
   fill: none;
   stroke: rgba(196, 181, 253, 0.18);
@@ -52,7 +49,6 @@ body {
   transform-origin: 50% 50%;
   animation: ring-pulse 3.5s ease-out infinite;
 }
-
 .hex-ring:nth-child(1)  { animation-delay: 0s;   stroke: rgba(196,181,253,0.22); }
 .hex-ring:nth-child(2)  { animation-delay: 0.4s; }
 .hex-ring:nth-child(3)  { animation-delay: 0.8s; }
@@ -63,7 +59,6 @@ body {
 .hex-ring:nth-child(8)  { animation-delay: 2.8s; }
 .hex-ring:nth-child(9)  { animation-delay: 3.2s; }
 .hex-ring:nth-child(10) { animation-delay: 3.6s; }
-
 @keyframes ring-pulse {
   0%   { opacity: 0;    transform: scale(0.55); }
   15%  { opacity: 1; }
@@ -84,31 +79,30 @@ main {
   position: relative;
   z-index: 10;
   isolation: isolate;
-  width: 90%;
-  max-width: 900px;
+  width: 92%;
+  max-width: 980px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: auto auto auto;
   gap: 12px;
 }
 
-.card-time   { grid-column: 1 / 4; }
-.card-date   { grid-column: 4 / 6; }
-.card-sq1    { grid-column: 1 / 2; }
-.card-sq2    { grid-column: 2 / 3; }
-.card-sq3    { grid-column: 3 / 4; }
-.card-sq4    { grid-column: 4 / 5; }
-.card-sq5    { grid-column: 5 / 6; }
+/* Row 1 */
+.card-calendar { grid-column: 1 / 4; }
+.card-library  { grid-column: 4 / 6; cursor: pointer; }
+
+/* Row 2 — 5 equal squares */
+.card-sq { grid-column: span 1; }
+
+/* Row 3 */
 .card-grad   { grid-column: 1 / 3; }
 .card-streak { grid-column: 3 / 5; }
-.card-anniv  { grid-column: 5 / 6; }
 
 /* ── Glass Card ── */
 .card {
   background: var(--glass-bg);
   border: 1px solid var(--lavender-border);
   border-radius: 18px;
-  padding: 22px 26px;
+  padding: 18px 22px;
   backdrop-filter: blur(48px) saturate(200%) brightness(1.15);
   -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.15);
   box-shadow:
@@ -117,12 +111,10 @@ main {
     0 -1px 0 rgba(0,0,0,0.3) inset,
     0 12px 48px rgba(0,0,0,0.6),
     0 4px 12px rgba(0,0,0,0.4);
-  transition: background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
+  transition: background 0.3s, box-shadow 0.3s;
   position: relative;
   overflow: hidden;
 }
-
-/* Top highlight streak */
 .card::before {
   content: '';
   position: absolute;
@@ -136,8 +128,6 @@ main {
   pointer-events: none;
   border-radius: inherit;
 }
-
-/* Bottom edge dark lip */
 .card::after {
   content: '';
   position: absolute;
@@ -146,11 +136,8 @@ main {
   background: rgba(0,0,0,0.35);
   pointer-events: none;
 }
-
 .card:hover {
   background: var(--glass-bg-hover);
-  backdrop-filter: blur(56px) saturate(220%) brightness(1.2);
-  -webkit-backdrop-filter: blur(56px) saturate(220%) brightness(1.2);
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.12) inset,
     0 2px 0 rgba(255,255,255,0.18) inset,
@@ -162,60 +149,78 @@ main {
 /* ── Typography ── */
 .label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  font-weight: 400;
+  font-size: 0.56rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   display: block;
 }
 
-.value {
+/* ── Square cards ── */
+.card-sq {
+  aspect-ratio: 1;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+.sq-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px var(--lavender));
+}
+.sq-label {
+  font-size: 0.48rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Time square ── */
+.card-time-sq { gap: 2px; }
+.time-sq {
   font-family: 'DM Serif Display', serif;
-  color: var(--text-bright);
-  line-height: 1.1;
-}
-
-/* Time card */
-.card-time .value {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
-  letter-spacing: -0.02em;
-}
-.card-time .amOrPm {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.9rem;
-  color: var(--lavender);
-  margin-left: 6px;
-  vertical-align: middle;
-  font-weight: 300;
-}
-
-/* Date card */
-.card-date .value {
-  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-}
-.card-date .dayOfWeek {
-  display: block;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--lavender);
-  letter-spacing: 0.12em;
-  margin-top: 4px;
-  font-style: normal;
-}
-
-/* Stat cards */
-.stat-number {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
   color: var(--text-bright);
   line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
+  letter-spacing: -0.01em;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+.time-sq .amOrPm {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--lavender);
+  letter-spacing: 0.15em;
+  margin-top: 2px;
 }
 
+/* ── Anniversary square ── */
+.card-anniv-sq { gap: 2px; }
+.stat-number-sq {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: var(--text-bright);
+  line-height: 1;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+/* ── Stat cards (bottom row) ── */
+.stat-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  color: var(--text-bright);
+  line-height: 1;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
 .stat-unit {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   color: var(--lavender);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -223,42 +228,219 @@ main {
   margin-top: 4px;
 }
 
-/* Small square cards */
-.card-sq1, .card-sq2, .card-sq3, .card-sq4, .card-sq5 {
-  aspect-ratio: 1;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.sq-icon {
-  font-size: 1.6rem;
-  margin-bottom: 6px;
-  filter: drop-shadow(0 0 8px var(--lavender));
-}
-
-.sq-label {
-  font-size: 0.52rem;
-  letter-spacing: 0.14em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  text-align: center;
-}
-
-/* Bottom row numbers */
-.card-grad .stat-number,
-.card-streak .stat-number,
-.card-anniv .stat-number {
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
-}
-
-/* Pulse glow on numbers */
 @keyframes glow-pulse {
   0%, 100% { text-shadow: 0 0 8px rgba(196,181,253,0.3); }
   50%       { text-shadow: 0 0 24px rgba(196,181,253,0.7), 0 0 48px rgba(196,181,253,0.2); }
 }
-.stat-number, .card-time .value {
-  animation: glow-pulse 4s ease-in-out infinite;
+
+/* ── Calendar Card ── */
+.card-calendar { padding: 16px 20px; }
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.cal-month-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--lavender);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Today date text — smaller */
+.cal-date-display { margin-bottom: 8px; }
+.cal-date-display .date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(245, 240, 255, 0.45);
+  letter-spacing: 0.04em;
+}
+
+/* 7-col day grid */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.cal-day-name {
+  font-size: 0.44rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+  padding-bottom: 4px;
+}
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.56rem;
+  font-family: 'DM Mono', monospace;
+  color: rgba(245,240,255,0.45);
+  border-radius: 6px;
+  position: relative;
+  cursor: default;
+}
+
+/* Dot days: Mon Tue Thu Fri Sat */
+.cal-day.dot-day {
+  color: rgba(245,240,255,0.88);
+}
+.cal-day.dot-day::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--lavender);
+  box-shadow: 0 0 4px var(--lavender);
+}
+
+/* Stroke days: Sun Wed */
+.cal-day.stroke-day {
+  border: 1px solid rgba(196, 181, 253, 0.3);
+  color: rgba(245,240,255,0.5);
+}
+
+/* Today */
+.cal-day.today {
+  background: rgba(196, 181, 253, 0.18) !important;
+  color: var(--text-bright) !important;
+  border: 1px solid rgba(196, 181, 253, 0.5) !important;
+  border-radius: 8px;
+}
+
+.cal-day.empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Library Card ── */
+.card-library {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.library-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  margin: 8px 0;
+}
+.library-icon-wrap {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px var(--lavender));
+  flex-shrink: 0;
+}
+.library-info { flex: 1; }
+.book-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 0.9rem;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.progress-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+}
+.progress-fill {
+  width: 60%;
+  height: 100%;
+  background: var(--lavender);
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(196,181,253,0.5);
+}
+.progress-label {
+  font-size: 0.48rem;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 5px;
+  display: block;
+}
+.mini-shelf {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+.spine {
+  width: 13px;
+  height: 40px;
+  border-radius: 3px;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.spine:hover {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+/* ── Library Modal ── */
+.library-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+  backdrop-filter: blur(6px);
+}
+.library-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-content {
+  width: 560px;
+  max-height: 80vh;
+  background: rgba(12, 10, 20, 0.96);
+  border: 1px solid var(--lavender-border);
+  border-radius: 20px;
+  padding: 28px;
+  overflow-y: auto;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 2px 0 rgba(255,255,255,0.08) inset;
+}
+.modal-content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  color: var(--text-bright);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+}
+.book-card {
+  background: rgba(196, 181, 253, 0.05);
+  border: 1px solid var(--lavender-border);
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  color: var(--text-bright);
+  font-family: 'DM Mono', monospace;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.book-card:hover {
+  background: rgba(196, 181, 253, 0.1);
+  transform: translateY(-3px);
 }

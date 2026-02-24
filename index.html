@@ -37,27 +37,63 @@
   </div>
 
   <main>
-    <section class="card card-time" role="region" aria-label="Time">
-      <span class="label">Current Time</span>
-      <time class="time value">
-        <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
-      </time>
+
+    <!-- ROW 1: Calendar (3 cols) | Library (2 cols) -->
+    <section class="card card-calendar" role="region" aria-label="Calendar">
+      <div class="cal-header">
+        <span class="label">Calendar</span>
+        <span class="cal-month-year" id="calMonthYear"></span>
+      </div>
+      <div class="cal-date-display">
+        <time class="date">
+          <span class="month"></span> <span class="dayOfMonth"></span>,
+          <span class="year"></span> — <span class="dayOfWeek"></span>
+        </time>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
     </section>
 
-    <section class="card card-date" role="region" aria-label="Date">
-      <span class="label">Today</span>
-      <time class="date value">
-        <span class="month">January</span> <span class="dayOfMonth">1</span>, <span class="year">2024</span>
-        <span class="dayOfWeek">Monday</span>
-      </time>
+    <section class="card card-library" role="region" aria-label="Library" id="openLibrary">
+      <span class="label">Currently Reading</span>
+      <div class="library-inner">
+        <div class="library-icon-wrap">📚</div>
+        <div class="library-info">
+          <p class="book-title">The Night Circus</p>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="progress-label">60% complete</span>
+        </div>
+      </div>
+      <div class="mini-shelf">
+        <div class="spine" style="background:#d96c6c"></div>
+        <div class="spine" style="background:#6cd9a5"></div>
+        <div class="spine" style="background:#6c8cff"></div>
+        <div class="spine" style="background:#d9c56c"></div>
+        <div class="spine" style="background:#c46cd9"></div>
+      </div>
     </section>
 
-    <div class="card card-sq1"><span class="sq-icon">⟨/⟩</span><span class="sq-label">HTML</span></div>
-    <div class="card card-sq2"><span class="sq-icon">✦</span><span class="sq-label">CSS</span></div>
-    <div class="card card-sq3"><span class="sq-icon">λ</span><span class="sq-label">JS</span></div>
-    <div class="card card-sq4"><span class="sq-icon">◈</span><span class="sq-label">React</span></div>
-    <div class="card card-sq5"><span class="sq-icon">⬡</span><span class="sq-label">Node</span></div>
+    <!-- ROW 2: Time | sq | sq | sq | Anniversary -->
+    <div class="card card-sq card-time-sq" role="region" aria-label="Time">
+      <span class="label">Time</span>
+      <time class="time time-sq">
+        <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span>
+        <span class="amOrPm">AM</span>
+      </time>
+    </div>
 
+    <div class="card card-sq"><span class="sq-icon">⟨/⟩</span><span class="sq-label">HTML</span></div>
+    <div class="card card-sq"><span class="sq-icon">λ</span><span class="sq-label">JS</span></div>
+    <div class="card card-sq"><span class="sq-icon">◈</span><span class="sq-label">React</span></div>
+
+    <div class="card card-sq card-anniv-sq" role="region" aria-label="Anniversary">
+      <span class="label">Anniversary</span>
+      <time class="ageOfPerson stat-number-sq">—</time>
+      <span class="stat-unit">years</span>
+    </div>
+
+    <!-- ROW 3: Graduation | Streak | Node -->
     <section class="card card-grad" role="region" aria-label="Days until event">
       <span class="label">Days Until Graduation</span>
       <time class="daysUntilEvent stat-number">—</time>
@@ -70,12 +106,26 @@
       <span class="stat-unit">day streak</span>
     </section>
 
-    <section class="card card-anniv" role="region" aria-label="Anniversary">
-      <span class="label">Anniversary</span>
-      <time class="ageOfPerson stat-number">—</time>
-      <span class="stat-unit">years</span>
-    </section>
+    <div class="card card-sq"><span class="sq-icon">⬡</span><span class="sq-label">Node</span></div>
+
   </main>
+
+  <!-- Library Modal -->
+  <div class="library-modal" id="libraryModal">
+    <div class="modal-content">
+      <h2>My Bookshelf</h2>
+      <div class="book-grid">
+        <div class="book-card">The Night Circus</div>
+        <div class="book-card">Atomic Habits</div>
+        <div class="book-card">Dune</div>
+        <div class="book-card">The Hobbit</div>
+        <div class="book-card">The Silent Patient</div>
+        <div class="book-card">The Midnight Library</div>
+        <div class="book-card">Gone Girl</div>
+        <div class="book-card">The Martian</div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
