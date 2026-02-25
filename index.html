@@ -38,14 +38,14 @@
 
   <!-- Theme Toggle Panel -->
   <div class="theme-panel" role="group" aria-label="Theme">
-    <button class="theme-btn" data-theme-set="dark"  aria-label="Dark mode"   title="Dark">🌙</button>
-    <button class="theme-btn" data-theme-set="light" aria-label="Light mode"  title="Light">☀️</button>
-    <button class="theme-btn" data-theme-set="system" aria-label="System mode" title="System">⚙️</button>
+    <button class="theme-btn" data-theme-set="dark"  aria-label="Dark mode"  title="Dark">🌙</button>
+    <button class="theme-btn" data-theme-set="light" aria-label="Light mode" title="Light">☀️</button>
+    <button class="theme-btn" data-theme-set="system" aria-label="System"   title="System">⚙️</button>
   </div>
 
   <main>
 
-    <!-- ROW 1: Calendar (3 cols) | Library (2 cols) -->
+    <!-- ROW 1: Calendar (3) | Library (2) -->
     <section class="card card-calendar" role="region" aria-label="Calendar">
       <div class="cal-header">
         <span class="label">Calendar</span>
@@ -66,9 +66,7 @@
         <div class="library-icon-wrap">📚</div>
         <div class="library-info">
           <p class="book-title">The Night Circus</p>
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
           <span class="progress-label">60% complete</span>
         </div>
       </div>
@@ -81,25 +79,32 @@
       </div>
     </section>
 
-    <!-- ROW 2: Time+Grad (spans 2) | sq | sq | Anniversary -->
-    <div class="card card-time-grad" role="region" aria-label="Time and Graduation">
-      <div class="time-grad-inner">
-        <div class="time-block">
-          <span class="label">Time</span>
-          <time class="time time-sq">
-            <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
-          </time>
-        </div>
-        <div class="grad-block">
-          <span class="label">Graduation</span>
-          <time class="daysUntilEvent stat-number-sm">—</time>
-          <span class="stat-unit-sm">days left</span>
-        </div>
-      </div>
+    <!-- ROW 2: Time | Graduation | Journaled | Fox | Anniversary (all sq) -->
+    <div class="card card-sq card-time-sq" role="region" aria-label="Time">
+      <span class="label">Time</span>
+      <time class="time time-sq">
+        <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
+      </time>
     </div>
 
-    <div class="card card-sq"><span class="sq-icon">⟨/⟩</span><span class="sq-label">HTML</span></div>
-    <div class="card card-sq"><span class="sq-icon">λ</span><span class="sq-label">JS</span></div>
+    <div class="card card-sq card-grad-sq" role="region" aria-label="Days until Graduation">
+      <span class="label">Graduation</span>
+      <time class="daysUntilEvent stat-number-sq">—</time>
+      <span class="stat-unit">days</span>
+    </div>
+
+    <div class="card card-sq card-streak-sq" role="region" aria-label="Days Journaled">
+      <span class="label">Journaled</span>
+      <time class="streakOfDays stat-number-sq">—</time>
+      <span class="stat-unit">days</span>
+    </div>
+
+    <div class="card card-sq card-fox" role="region" aria-label="Daily Fox" id="foxCard">
+      <span class="label">Daily Fox</span>
+      <div class="fox-img-wrap" id="foxImgWrap">
+        <span class="fox-loading">🦊</span>
+      </div>
+    </div>
 
     <div class="card card-sq card-anniv-sq" role="region" aria-label="Anniversary">
       <span class="label">Anniversary</span>
@@ -107,7 +112,7 @@
       <span class="stat-unit">yrs</span>
     </div>
 
-    <!-- ROW 3: Music Player (2 cols) | Streak | Node sq -->
+    <!-- ROW 3: Music (2) | Moon (2) | Node sq -->
     <section class="card card-music" role="region" aria-label="Music Player">
       <span class="label">Now Playing</span>
       <div class="music-inner">
@@ -115,7 +120,7 @@
         <div class="music-info">
           <p class="music-track" id="musicTrack">No track loaded</p>
           <p class="music-artist" id="musicArtist">—</p>
-          <div class="music-progress-bar">
+          <div class="music-progress-bar" id="musicProgressBar">
             <div class="music-progress-fill" id="musicFill"></div>
           </div>
           <span class="music-time" id="musicTimeDisplay">0:00 / 0:00</span>
@@ -133,10 +138,15 @@
       <audio id="audioPlayer"></audio>
     </section>
 
-    <section class="card card-streak" role="region" aria-label="Streak">
-      <span class="label">Days Journaled</span>
-      <time class="streakOfDays stat-number">—</time>
-      <span class="stat-unit">day streak</span>
+    <section class="card card-moon" role="region" aria-label="Moon Phase">
+      <span class="label">Moon Phase</span>
+      <div class="moon-inner">
+        <canvas class="moon-canvas" id="moonCanvas" width="64" height="64" aria-label="Moon phase illustration"></canvas>
+        <div class="moon-info">
+          <p class="moon-name" id="moonName">—</p>
+          <p class="moon-detail" id="moonDetail">—</p>
+        </div>
+      </div>
     </section>
 
     <div class="card card-sq"><span class="sq-icon">⬡</span><span class="sq-label">Node</span></div>
@@ -170,11 +180,11 @@
           <div class="book-detail-title" id="bookDetailTitle"></div>
           <div class="book-detail-author" id="bookDetailAuthor"></div>
           <div class="star-rating" id="starRating" role="group" aria-label="Rating">
-            <span class="star" data-star="1" role="button" tabindex="0" aria-label="1 star">★</span>
-            <span class="star" data-star="2" role="button" tabindex="0" aria-label="2 stars">★</span>
-            <span class="star" data-star="3" role="button" tabindex="0" aria-label="3 stars">★</span>
-            <span class="star" data-star="4" role="button" tabindex="0" aria-label="4 stars">★</span>
-            <span class="star" data-star="5" role="button" tabindex="0" aria-label="5 stars">★</span>
+            <span class="star" data-star="1" role="button" tabindex="0">★</span>
+            <span class="star" data-star="2" role="button" tabindex="0">★</span>
+            <span class="star" data-star="3" role="button" tabindex="0">★</span>
+            <span class="star" data-star="4" role="button" tabindex="0">★</span>
+            <span class="star" data-star="5" role="button" tabindex="0">★</span>
           </div>
           <div class="book-link-wrap">
             <input class="book-link-input" id="bookLinkInput" type="url" placeholder="Goodreads, Amazon link…" />
