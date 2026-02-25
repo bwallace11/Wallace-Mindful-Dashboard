@@ -1,9 +1,8 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Peace Of Mind</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,58 +11,48 @@
   <script src="/src/script.js" type="module" defer></script>
 </head>
 <body>
-
   <canvas id="rain"></canvas>
 
   <div class="hex-rings">
-    <svg width="900" height="900" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <clipPath id="leftHalf">
-          <rect x="0" y="0" width="250" height="500"/>
-        </clipPath>
-      </defs>
-      <polygon points="250,30 470,155 470,345 250,470 30,345 30,155" fill="none" stroke="rgba(196,181,253,0.28)" stroke-width="1.5" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
-      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#leftHalf)"/>
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="lh"><rect x="0" y="0" width="250" height="500"/></clipPath></defs>
+      <polygon points="250,30 470,155 470,345 250,470 30,345 30,155" fill="none" stroke="rgba(196,181,253,0.2)" stroke-width="1.5" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
     </svg>
   </div>
 
-  <!-- Theme Toggle Panel -->
+  <!-- Theme -->
   <div class="theme-panel" role="group" aria-label="Theme">
-    <button class="theme-btn" data-theme-set="dark"  aria-label="Dark mode"  title="Dark">🌙</button>
-    <button class="theme-btn" data-theme-set="light" aria-label="Light mode" title="Light">☀️</button>
-    <button class="theme-btn" data-theme-set="system" aria-label="System"   title="System">⚙️</button>
+    <button class="theme-btn" data-theme-set="dark"   title="Dark">🌙</button>
+    <button class="theme-btn" data-theme-set="light"  title="Light">☀️</button>
+    <button class="theme-btn" data-theme-set="system" title="System">⚙️</button>
   </div>
 
   <main>
-
-    <!-- ROW 1: Calendar (3) | Library (2) -->
-    <section class="card card-calendar" role="region" aria-label="Calendar">
+    <!-- R1 C1-2: Calendar -->
+    <section class="card card-calendar" aria-label="Calendar">
       <div class="cal-header">
         <span class="label">Calendar</span>
-        <span class="cal-month-year" id="calMonthYear"></span>
+        <span id="calMonthYear" class="cal-month-year"></span>
       </div>
       <div class="cal-date-display">
-        <time class="date">
-          <span class="month"></span> <span class="dayOfMonth"></span>,
-          <span class="year"></span> — <span class="dayOfWeek"></span>
-        </time>
+        <time class="date"><span class="month"></span> <span class="dayOfMonth"></span>, <span class="year"></span> — <span class="dayOfWeek"></span></time>
       </div>
       <div class="cal-grid" id="calGrid"></div>
     </section>
 
-    <section class="card card-library" role="region" aria-label="Library" id="openLibrary">
+    <!-- R1 C3-4: Library -->
+    <section class="card card-library" aria-label="Library" id="openLibrary">
       <span class="label">Currently Reading</span>
       <div class="library-inner">
-        <div class="library-icon-wrap">📚</div>
+        <div class="lib-icon">📚</div>
         <div class="library-info">
           <p class="book-title">The Night Circus</p>
           <div class="progress-bar"><div class="progress-fill"></div></div>
@@ -79,69 +68,98 @@
       </div>
     </section>
 
-    <!-- ROW 2: Time | Graduation | Journaled | Fox | Anniversary (all sq) -->
-    <div class="card card-sq card-time-sq" role="region" aria-label="Time">
+    <!-- R1-2 C5: Anniversary spans 2 rows -->
+    <section class="card card-anniv" aria-label="Anniversary" id="annivCard">
+      <span class="label">Anniversary</span>
+      <div class="anniv-slide-wrap" id="annivSlideWrap">
+        <div class="anniv-placeholder" id="annivPlaceholder">
+          <span style="font-size:2rem">💕</span>
+          <span class="anniv-hint">Tap to add photos</span>
+        </div>
+        <img class="anniv-img hidden" id="annivImg" alt="Anniversary photo"/>
+        <button class="anniv-nav anniv-prev" id="annivPrev" aria-label="Prev">‹</button>
+        <button class="anniv-nav anniv-next" id="annivNext" aria-label="Next">›</button>
+      </div>
+      <div class="anniv-dots" id="annivDots"></div>
+      <div class="anniv-footer">
+        <span class="anniv-years" id="annivYears">—</span>
+        <span class="anniv-unit">years together</span>
+        <span class="anniv-date">April 20, 2022 💕</span>
+      </div>
+      <input type="file" id="annivUpload" accept="image/*" multiple style="display:none">
+    </section>
+
+    <!-- R2 C1: Journaled (was Time) -->
+    <div class="card card-sq card-streak-sq" aria-label="Days Journaled">
+      <span class="label">Journaled</span>
+      <time class="streakOfDays stat-num">—</time>
+      <span class="stat-unit">days</span>
+    </div>
+
+    <!-- R2 C2: Time (was Journaled) -->
+    <div class="card card-sq card-time-sq" aria-label="Time">
       <span class="label">Time</span>
       <time class="time time-sq">
         <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
       </time>
     </div>
 
-    <div class="card card-sq card-grad-sq" role="region" aria-label="Days until Graduation">
+    <!-- R2 C3: Graduation -->
+    <div class="card card-sq card-grad-sq" aria-label="Graduation">
       <span class="label">Graduation</span>
-      <time class="daysUntilEvent stat-number-sq">—</time>
+      <time class="daysUntilEvent stat-num">—</time>
       <span class="stat-unit">days</span>
     </div>
 
-    <div class="card card-sq card-streak-sq" role="region" aria-label="Days Journaled">
-      <span class="label">Journaled</span>
-      <time class="streakOfDays stat-number-sq">—</time>
-      <span class="stat-unit">days</span>
-    </div>
-
-    <div class="card card-sq card-fox" role="region" aria-label="Daily Fox" id="foxCard">
-      <span class="label">Daily Fox</span>
-      <div class="fox-img-wrap" id="foxImgWrap">
-        <span class="fox-loading">🦊</span>
+    <!-- R2 C4: Water Widget -->
+    <div class="card card-sq card-water" aria-label="Hydration" id="waterCard">
+      <span class="label">Hydration</span>
+      <div class="water-body">
+        <div class="water-glass-wrap">
+          <div class="water-glass">
+            <div class="water-fill" id="waterFill">
+              <div class="water-wave"></div>
+            </div>
+            <div class="water-drip" id="waterDrip"></div>
+            <div class="water-shine"></div>
+          </div>
+        </div>
+        <div class="water-stats">
+          <span class="water-oz" id="waterOzDisplay">0</span>
+          <span class="water-oz-label">/ <span id="waterGoalDisplay">64</span> oz</span>
+          <div class="water-mini-bar"><div class="water-mini-fill" id="waterMiniFill"></div></div>
+        </div>
       </div>
     </div>
+    <!-- C5 occupied by anniv rowspan -->
 
-    <div class="card card-sq card-anniv-sq" role="region" aria-label="Anniversary">
-      <span class="label">Anniversary</span>
-      <time class="ageOfPerson stat-number-sq">—</time>
-      <span class="stat-unit">yrs</span>
-    </div>
-
-    <!-- ROW 3: Music (2) | Moon (2) | Node sq -->
-    <section class="card card-music" role="region" aria-label="Music Player">
+    <!-- R3 C1-2: Music -->
+    <section class="card card-music" aria-label="Music Player">
       <span class="label">Now Playing</span>
       <div class="music-inner">
         <div class="music-art" id="musicArt">♪</div>
         <div class="music-info">
           <p class="music-track" id="musicTrack">No track loaded</p>
           <p class="music-artist" id="musicArtist">—</p>
-          <div class="music-progress-bar" id="musicProgressBar">
-            <div class="music-progress-fill" id="musicFill"></div>
-          </div>
+          <div class="music-bar" id="musicProgressBar"><div class="music-bar-fill" id="musicFill"></div></div>
           <span class="music-time" id="musicTimeDisplay">0:00 / 0:00</span>
         </div>
       </div>
       <div class="music-controls">
-        <button class="music-btn" id="musicPrev" aria-label="Previous">⏮</button>
-        <button class="music-btn music-btn-play" id="musicPlay" aria-label="Play/Pause">▶</button>
-        <button class="music-btn" id="musicNext" aria-label="Next">⏭</button>
-        <input class="music-volume" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.8" aria-label="Volume">
-        <label class="music-upload-btn" aria-label="Upload music">
-          ＋ <input type="file" id="musicUpload" accept="audio/*" multiple style="display:none">
-        </label>
+        <button class="music-btn" id="musicPrev">⏮</button>
+        <button class="music-btn music-play" id="musicPlay">▶</button>
+        <button class="music-btn" id="musicNext">⏭</button>
+        <input class="music-vol" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.8">
+        <label class="music-upload">＋<input type="file" id="musicUpload" accept="audio/*" multiple style="display:none"></label>
       </div>
       <audio id="audioPlayer"></audio>
     </section>
 
-    <section class="card card-moon" role="region" aria-label="Moon Phase">
+    <!-- R3 C3-4: Moon -->
+    <section class="card card-moon" aria-label="Moon Phase">
       <span class="label">Moon Phase</span>
       <div class="moon-inner">
-        <canvas class="moon-canvas" id="moonCanvas" width="64" height="64" aria-label="Moon phase illustration"></canvas>
+        <canvas id="moonCanvas" width="72" height="72" class="moon-canvas"></canvas>
         <div class="moon-info">
           <p class="moon-name" id="moonName">—</p>
           <p class="moon-detail" id="moonDetail">—</p>
@@ -149,15 +167,21 @@
       </div>
     </section>
 
-    <div class="card card-sq"><span class="sq-icon">⬡</span><span class="sq-label">Node</span></div>
-
+    <!-- R3 C5: Fox -->
+    <div class="card card-sq card-fox" id="foxCard" aria-label="Daily Fox">
+      <span class="label">Daily Fox</span>
+      <div class="fox-wrap" id="foxImgWrap"><span class="fox-emoji">🦊</span></div>
+    </div>
   </main>
 
-  <!-- Library Modal -->
-  <div class="library-modal" id="libraryModal" role="dialog" aria-modal="true" aria-label="My Bookshelf">
-    <div class="modal-content">
-      <h2>My Bookshelf</h2>
-      <div class="book-grid">
+  <!-- ══ MODALS ══ -->
+
+  <!-- Library -->
+  <div class="modal-overlay" id="libraryModal">
+    <div class="modal-glass">
+      <button class="modal-x" id="libraryClose">✕</button>
+      <h2 class="modal-title">My Bookshelf</h2>
+      <div class="book-grid" id="bookGrid">
         <div class="book-card" data-book="night-circus">The Night Circus</div>
         <div class="book-card" data-book="atomic-habits">Atomic Habits</div>
         <div class="book-card" data-book="dune">Dune</div>
@@ -170,49 +194,71 @@
     </div>
   </div>
 
-  <!-- Book Detail Modal -->
-  <div class="book-detail-modal" id="bookDetailModal" role="dialog" aria-modal="true">
-    <div class="book-detail-content">
-      <button class="book-detail-close" id="bookDetailClose" aria-label="Close">✕</button>
-      <div class="book-detail-header">
-        <div class="book-cover" id="bookCover">📖</div>
-        <div class="book-meta">
-          <div class="book-detail-title" id="bookDetailTitle"></div>
-          <div class="book-detail-author" id="bookDetailAuthor"></div>
-          <div class="star-rating" id="starRating" role="group" aria-label="Rating">
-            <span class="star" data-star="1" role="button" tabindex="0">★</span>
-            <span class="star" data-star="2" role="button" tabindex="0">★</span>
-            <span class="star" data-star="3" role="button" tabindex="0">★</span>
-            <span class="star" data-star="4" role="button" tabindex="0">★</span>
-            <span class="star" data-star="5" role="button" tabindex="0">★</span>
+  <!-- Book Detail -->
+  <div class="modal-overlay" id="bookDetailModal" style="z-index:201">
+    <div class="modal-glass">
+      <button class="modal-x" id="bookDetailClose">✕</button>
+      <div class="bk-header">
+        <div class="bk-cover" id="bookCover">📖</div>
+        <div class="bk-meta">
+          <div class="bk-title" id="bookDetailTitle"></div>
+          <div class="bk-author" id="bookDetailAuthor"></div>
+          <div class="star-row" id="starRating">
+            <span class="star" data-star="1" tabindex="0">★</span>
+            <span class="star" data-star="2" tabindex="0">★</span>
+            <span class="star" data-star="3" tabindex="0">★</span>
+            <span class="star" data-star="4" tabindex="0">★</span>
+            <span class="star" data-star="5" tabindex="0">★</span>
           </div>
-          <div class="book-link-wrap">
-            <input class="book-link-input" id="bookLinkInput" type="url" placeholder="Goodreads, Amazon link…" />
-            <button class="book-link-btn" id="bookLinkOpen">Open ↗</button>
+          <div class="link-row">
+            <input class="mi" id="bookLinkInput" type="url" placeholder="Goodreads / Amazon link…"/>
+            <button class="mb" id="bookLinkOpen">Open ↗</button>
           </div>
         </div>
       </div>
-      <div class="book-summary">
-        <span class="book-summary-label">Summary</span>
+      <div class="bk-summary">
+        <span class="sec-label">Summary</span>
         <span id="bookSummaryText"></span>
       </div>
     </div>
   </div>
 
-  <!-- Calendar Notes Modal -->
-  <div class="cal-modal" id="calModal" role="dialog" aria-modal="true">
-    <div class="cal-modal-content">
-      <button class="cal-modal-close" id="calModalClose" aria-label="Close">✕</button>
-      <div class="cal-modal-date" id="calModalDate"></div>
-      <div class="cal-notes-section">
-        <span class="book-summary-label">Notes & Reminders</span>
-        <textarea class="cal-notes-input" id="calNotesInput" placeholder="Add a note or reminder for this day…" rows="5"></textarea>
+  <!-- Calendar Notes -->
+  <div class="modal-overlay" id="calModal" style="z-index:150">
+    <div class="modal-glass modal-sm">
+      <button class="modal-x" id="calModalClose">✕</button>
+      <div class="modal-title" id="calModalDate"></div>
+      <span class="sec-label">Notes & Reminders</span>
+      <textarea class="mta" id="calNotesInput" placeholder="Add a note for this day…" rows="4"></textarea>
+      <div id="calRemindersList"></div>
+      <div class="row-gap">
+        <input class="mi" id="calReminderInput" type="text" placeholder="Quick reminder (e.g. Doctor 3pm)…"/>
+        <button class="mb" id="calAddReminder">Add</button>
       </div>
-      <div class="cal-reminders-list" id="calRemindersList"></div>
-      <div class="cal-add-reminder">
-        <input class="book-link-input" id="calReminderInput" type="text" placeholder="Quick reminder (e.g. 'Doctor at 3pm')…" />
-        <button class="book-link-btn" id="calAddReminder">Add</button>
+    </div>
+  </div>
+
+  <!-- Water Log -->
+  <div class="modal-overlay" id="waterModal" style="z-index:150">
+    <div class="modal-glass modal-sm">
+      <button class="modal-x" id="waterModalClose">✕</button>
+      <div class="modal-title">💧 Hydration Log</div>
+      <div class="water-log-today">
+        <span class="sec-label">Today's intake</span>
+        <span class="water-big" id="wToday">0</span>
+        <span class="water-big-unit">/ <span id="wGoal">64</span> oz</span>
       </div>
+      <div class="row-gap" style="margin-bottom:10px">
+        <input class="mi" id="waterOzInput" type="number" min="1" max="200" placeholder="oz just drank…"/>
+        <button class="mb" id="waterLogBtn">+ Log</button>
+      </div>
+      <div class="row-gap" style="margin-bottom:14px">
+        <span class="sec-label" style="margin:0;white-space:nowrap">Daily goal (oz)</span>
+        <input class="mi" id="waterGoalInput" type="number" min="16" max="300" placeholder="64" style="max-width:80px"/>
+        <button class="mb" id="waterGoalSave">Save</button>
+      </div>
+      <span class="sec-label">History</span>
+      <div class="water-hist" id="waterHistory"></div>
     </div>
   </div>
 
