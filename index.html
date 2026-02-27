@@ -4,17 +4,48 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Peace Of Mind</title>
+
+  <!-- Melodrama via Fontshare CDN -->
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=melodrama@400,500,700&display=swap" rel="stylesheet">
+
+  <!-- DM Mono for UI labels -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/src/style.css">
   <script src="/src/script.js" type="module" defer></script>
 </head>
 <body>
-  <canvas id="glassCanvas"></canvas>
+
+  <!-- ═══ SVG Liquid Glass Distortion Filter (snipzy.dev method) ═══ -->
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <filter id="glass-distortion" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+        <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" seed="3" result="noise"/>
+        <feDisplacementMap id="glassDispMap" in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <canvas id="rain"></canvas>
 
-  <!-- Theme -->
+  <div class="hex-rings" aria-hidden="true">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="lh"><rect x="0" y="0" width="250" height="500"/></clipPath></defs>
+      <polygon points="250,30 470,155 470,345 250,470 30,345 30,155" fill="none" stroke="rgba(196,181,253,0.18)" stroke-width="1.5" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+      <polygon class="hex-ring" points="250,30 470,155 470,345 250,470 30,345 30,155" clip-path="url(#lh)"/>
+    </svg>
+  </div>
+
+  <!-- Theme switcher -->
   <div class="theme-panel" role="group" aria-label="Theme">
     <button class="theme-btn" data-theme-set="dark"   title="Dark">🌙</button>
     <button class="theme-btn" data-theme-set="light"  title="Light">☀️</button>
@@ -22,156 +53,215 @@
   </div>
 
   <main>
-    <!-- R1 C1-2: Calendar -->
+
+    <!-- ── ROW 1 C1-2 : Calendar ── -->
     <section class="card card-calendar" aria-label="Calendar">
-      <div class="cal-header">
-        <span class="label">Calendar</span>
-        <span id="calMonthYear" class="cal-month-year"></span>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content">
+        <div class="cal-header">
+          <span class="label">Calendar</span>
+          <span id="calMonthYear" class="cal-month-year"></span>
+        </div>
+        <div class="cal-date-display">
+          <time class="date">
+            <span class="month"></span> <span class="dayOfMonth"></span>,
+            <span class="year"></span> — <span class="dayOfWeek"></span>
+          </time>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
       </div>
-      <div class="cal-date-display">
-        <time class="date"><span class="month"></span> <span class="dayOfMonth"></span>, <span class="year"></span> — <span class="dayOfWeek"></span></time>
-      </div>
-      <div class="cal-grid" id="calGrid"></div>
     </section>
 
-    <!-- R1 C3-4: Library -->
+    <!-- ── ROW 1 C3-4 : Library ── -->
     <section class="card card-library" aria-label="Library" id="openLibrary">
-      <span class="label">Currently Reading</span>
-      <div class="library-inner">
-        <div class="lib-icon">📚</div>
-        <div class="library-info">
-          <p class="book-title">The Night Circus</p>
-          <div class="progress-bar"><div class="progress-fill"></div></div>
-          <span class="progress-label">60% complete</span>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content">
+        <span class="label">Currently Reading</span>
+        <div class="library-inner">
+          <div class="lib-icon">📚</div>
+          <div class="library-info">
+            <p class="book-title">The Night Circus</p>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <span class="progress-label">60% complete</span>
+          </div>
         </div>
-      </div>
-      <div class="mini-shelf">
-        <div class="spine" style="background:#d96c6c"></div>
-        <div class="spine" style="background:#6cd9a5"></div>
-        <div class="spine" style="background:#6c8cff"></div>
-        <div class="spine" style="background:#d9c56c"></div>
-        <div class="spine" style="background:#c46cd9"></div>
+        <div class="mini-shelf">
+          <div class="spine" style="background:#d96c6c"></div>
+          <div class="spine" style="background:#6cd9a5"></div>
+          <div class="spine" style="background:#6c8cff"></div>
+          <div class="spine" style="background:#d9c56c"></div>
+          <div class="spine" style="background:#c46cd9"></div>
+        </div>
       </div>
     </section>
 
-    <!-- R1-2 C5: Anniversary spans 2 rows -->
+    <!-- ── ROW 1-2 C5-6 : Anniversary (spans 2 rows, 2 cols) ── -->
     <section class="card card-anniv" aria-label="Anniversary" id="annivCard">
-      <span class="label">Anniversary</span>
-      <div class="anniv-slide-wrap" id="annivSlideWrap">
-        <div class="anniv-placeholder" id="annivPlaceholder">
-          <span style="font-size:2rem">💕</span>
-          <span class="anniv-hint">Tap to add photos</span>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content anniv-content">
+        <div class="anniv-header-row">
+          <span class="label" style="margin-bottom:0">Anniversary 💕</span>
+          <div class="anniv-actions">
+            <button class="anniv-action-btn" id="annivAddBtn" title="Add photos">＋ Add</button>
+            <button class="anniv-action-btn anniv-action-danger" id="annivRemoveBtn" title="Remove current photo">✕ Remove</button>
+          </div>
         </div>
-        <img class="anniv-img hidden" id="annivImg" alt="Anniversary photo"/>
-        <button class="anniv-nav anniv-prev" id="annivPrev" aria-label="Prev">‹</button>
-        <button class="anniv-nav anniv-next" id="annivNext" aria-label="Next">›</button>
-      </div>
-      <div class="anniv-dots" id="annivDots"></div>
-      <div class="anniv-footer">
-        <span class="anniv-years" id="annivYears">—</span>
-        <span class="anniv-unit">years together</span>
-        <span class="anniv-date">April 20, 2022 💕</span>
+        <div class="anniv-slide-wrap" id="annivSlideWrap">
+          <div class="anniv-placeholder" id="annivPlaceholder">
+            <span style="font-size:2.5rem">💕</span>
+            <span class="anniv-hint">Click + Add to upload photos</span>
+          </div>
+          <img class="anniv-img hidden" id="annivImg" alt="Anniversary photo"/>
+          <button class="anniv-nav anniv-prev" id="annivPrev" aria-label="Previous">‹</button>
+          <button class="anniv-nav anniv-next" id="annivNext" aria-label="Next">›</button>
+          <div class="anniv-counter" id="annivCounter"></div>
+        </div>
+        <div class="anniv-dots" id="annivDots"></div>
+        <div class="anniv-footer">
+          <span class="anniv-years" id="annivYears">—</span>
+          <span class="anniv-unit">years together</span>
+          <span class="anniv-date">April 20, 2022 💕</span>
+        </div>
       </div>
       <input type="file" id="annivUpload" accept="image/*" multiple style="display:none">
     </section>
 
-    <!-- R2 C1: Gym Log -->
-    <div class="card card-sq card-gym" aria-label="Gym Log" id="gymCard">
-      <span class="label">Gym</span>
-      <div class="gym-week" id="gymWeek"></div>
-      <button class="gym-btn" id="gymLogBtn">I went!</button>
-    </div>
-
-    <!-- R2 C2: Time (was Journaled) -->
-    <div class="card card-sq card-time-sq" aria-label="Time">
-      <span class="label">Time</span>
-      <time class="time time-sq">
-        <span class="hours">00</span>:<span class="minutes">00</span>:<span class="seconds">00</span><span class="amOrPm">AM</span>
-      </time>
-    </div>
-
-    <!-- R2 C3: Graduation -->
+    <!-- ── ROW 2 C1 : Graduation (swapped with Time) ── -->
     <div class="card card-sq card-grad-sq" aria-label="Graduation">
-      <span class="label">Graduation</span>
-      <time class="daysUntilEvent stat-num">—</time>
-      <span class="stat-unit">days</span>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content sq-content">
+        <span class="label">Graduation</span>
+        <time class="daysUntilEvent stat-num">—</time>
+        <span class="stat-unit">days left</span>
+      </div>
     </div>
 
-    <!-- R2 C4: Water Widget -->
-    <div class="card card-water" aria-label="Hydration" id="waterCard">
-      <span class="label">Hydration</span>
-      <div class="water-body">
-        <div class="water-glass-wrap">
-          <div class="water-glass">
-            <div class="water-fill" id="waterFill">
-              <div class="water-wave"></div>
-            </div>
-            <div class="water-drip" id="waterDrip"></div>
-            <div class="water-shine"></div>
-          </div>
-        </div>
-        <div class="water-info-row">
-          <div class="water-oz-display">
-            <span class="water-oz" id="waterOzDisplay">0</span>
-            <span class="water-oz-label">/ <span id="waterGoalDisplay">64</span> oz</span>
-          </div>
-          <div class="water-mini-bar">
-            <div class="water-mini-fill" id="waterMiniFill"></div>
-          </div>
+    <!-- ── ROW 2 C2 : Time (swapped with Graduation, big) ── -->
+    <div class="card card-sq card-time-sq" aria-label="Time">
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content sq-content">
+        <span class="label">Time</span>
+        <time class="time time-sq">
+          <span class="hours">00</span><span class="time-colon">:</span><span class="minutes">00</span><span class="amOrPm">AM</span>
+        </time>
+      </div>
+    </div>
+
+    <!-- ── ROW 2 C3-4 : Gym + Graduation combined ── -->
+    <div class="card card-gym-grad" aria-label="Gym Log" id="gymCard">
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content gym-grad-content">
+        <div class="gym-section">
+          <span class="label">Gym Log</span>
+          <div class="gym-week" id="gymWeek"></div>
+          <button class="gym-btn" id="gymLogBtn">I went today! 💪</button>
         </div>
       </div>
     </div>
-    <!-- C5 occupied by anniv rowspan -->
 
-    <!-- R3 C1-2: Music -->
+    <!-- ── ROW 3 C1-2 : Music ── -->
     <section class="card card-music" aria-label="Music Player">
-      <span class="label">Now Playing</span>
-      <div class="music-inner">
-        <div class="music-art" id="musicArt">♪</div>
-        <div class="music-info">
-          <p class="music-track" id="musicTrack">No track loaded</p>
-          <p class="music-artist" id="musicArtist">—</p>
-          <div class="music-bar" id="musicProgressBar"><div class="music-bar-fill" id="musicFill"></div></div>
-          <span class="music-time" id="musicTimeDisplay">0:00 / 0:00</span>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content">
+        <span class="label">Now Playing</span>
+        <div class="music-inner">
+          <div class="music-art" id="musicArt">♪</div>
+          <div class="music-info">
+            <p class="music-track" id="musicTrack">No track loaded</p>
+            <p class="music-artist" id="musicArtist">—</p>
+            <div class="music-bar" id="musicProgressBar"><div class="music-bar-fill" id="musicFill"></div></div>
+            <span class="music-time" id="musicTimeDisplay">0:00 / 0:00</span>
+          </div>
         </div>
+        <div class="music-controls">
+          <button class="music-btn" id="musicPrev">⏮</button>
+          <button class="music-btn music-play" id="musicPlay">▶</button>
+          <button class="music-btn" id="musicNext">⏭</button>
+          <input class="music-vol" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.8">
+          <label class="music-upload">＋<input type="file" id="musicUpload" accept="audio/*" multiple style="display:none"></label>
+        </div>
+        <audio id="audioPlayer"></audio>
       </div>
-      <div class="music-controls">
-        <button class="music-btn" id="musicPrev">⏮</button>
-        <button class="music-btn music-play" id="musicPlay">▶</button>
-        <button class="music-btn" id="musicNext">⏭</button>
-        <input class="music-vol" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.8">
-        <label class="music-upload">＋<input type="file" id="musicUpload" accept="audio/*" multiple style="display:none"></label>
-      </div>
-      <audio id="audioPlayer"></audio>
     </section>
 
-    <!-- R3 C3-4: Moon -->
+    <!-- ── ROW 3 C3-4 : Moon ── -->
     <section class="card card-moon" aria-label="Moon Phase">
-      <span class="label">Moon Phase</span>
-      <div class="moon-inner">
-        <canvas id="moonCanvas" width="72" height="72" class="moon-canvas"></canvas>
-        <div class="moon-info">
-          <p class="moon-name" id="moonName">—</p>
-          <p class="moon-detail" id="moonDetail">—</p>
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content">
+        <span class="label">Moon Phase</span>
+        <div class="moon-inner">
+          <canvas id="moonCanvas" width="72" height="72" class="moon-canvas"></canvas>
+          <div class="moon-info">
+            <p class="moon-name" id="moonName">—</p>
+            <p class="moon-detail" id="moonDetail">—</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- R3 C5: Fox -->
-    <div class="card card-sq card-fox" id="foxCard" aria-label="Daily Fox">
-      <span class="label">Daily Fox</span>
-      <div class="fox-wrap" id="foxImgWrap"><span class="fox-emoji">🦊</span></div>
+    <!-- ── ROW 3 C5-6 : Fox (2 cols wide) ── -->
+    <div class="card card-fox" id="foxCard" aria-label="Daily Fox">
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content fox-content">
+        <span class="label">Daily Fox — click for a new one! 🦊</span>
+        <div class="fox-wrap" id="foxImgWrap"><span class="fox-emoji">🦊</span></div>
+      </div>
     </div>
+
+    <!-- ── ROW 3 C4 : Water ── -->
+    <div class="card card-water" aria-label="Hydration" id="waterCard">
+      <div class="glass-filter"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="card-content water-content">
+        <span class="label">Hydration</span>
+        <div class="water-body">
+          <div class="water-glass-wrap">
+            <div class="water-glass">
+              <div class="water-fill" id="waterFill"><div class="water-wave"></div></div>
+              <div class="water-drip" id="waterDrip"></div>
+              <div class="water-shine"></div>
+            </div>
+          </div>
+          <div class="water-info-row">
+            <div class="water-oz-display">
+              <span class="water-oz" id="waterOzDisplay">0</span>
+              <span class="water-oz-label">/ <span id="waterGoalDisplay">64</span> oz</span>
+            </div>
+            <div class="water-mini-bar"><div class="water-mini-fill" id="waterMiniFill"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- ══ MODALS ══ -->
+  <!-- ══════════ MODALS ══════════ -->
 
   <!-- Library -->
   <div class="modal-overlay" id="libraryModal">
     <div class="modal-glass">
       <button class="modal-x" id="libraryClose">✕</button>
       <h2 class="modal-title">My Bookshelf</h2>
-      <div class="book-grid" id="bookGrid">
+      <div class="book-grid">
         <div class="book-card" data-book="night-circus">The Night Circus</div>
         <div class="book-card" data-book="atomic-habits">Atomic Habits</div>
         <div class="book-card" data-book="dune">Dune</div>
@@ -193,7 +283,7 @@
         <div class="bk-meta">
           <div class="bk-title" id="bookDetailTitle"></div>
           <div class="bk-author" id="bookDetailAuthor"></div>
-          <div class="star-row" id="starRating">
+          <div class="star-row">
             <span class="star" data-star="1" tabindex="0">★</span>
             <span class="star" data-star="2" tabindex="0">★</span>
             <span class="star" data-star="3" tabindex="0">★</span>
@@ -218,11 +308,11 @@
     <div class="modal-glass modal-sm">
       <button class="modal-x" id="calModalClose">✕</button>
       <div class="modal-title" id="calModalDate"></div>
-      <span class="sec-label">Notes & Reminders</span>
+      <span class="sec-label">Notes &amp; Reminders</span>
       <textarea class="mta" id="calNotesInput" placeholder="Add a note for this day…" rows="4"></textarea>
       <div id="calRemindersList"></div>
       <div class="row-gap">
-        <input class="mi" id="calReminderInput" type="text" placeholder="Quick reminder (e.g. Doctor 3pm)…"/>
+        <input class="mi" id="calReminderInput" type="text" placeholder="Quick reminder…"/>
         <button class="mb" id="calAddReminder">Add</button>
       </div>
     </div>
@@ -252,17 +342,14 @@
     </div>
   </div>
 
-
-  <!-- Gym Log Modal -->
+  <!-- Gym Log -->
   <div class="modal-overlay" id="gymModal" style="z-index:150">
     <div class="modal-glass modal-sm">
       <button class="modal-x" id="gymModalClose">✕</button>
       <div class="modal-title">🏋️ Gym Log</div>
       <div class="gym-week-full" id="gymWeekFull"></div>
-      <div class="gym-history-section">
-        <span class="sec-label" style="margin-top:14px;display:block">Past Weeks</span>
-        <div class="gym-hist" id="gymHistory"></div>
-      </div>
+      <span class="sec-label" style="margin-top:14px;display:block">Past Weeks</span>
+      <div class="gym-hist" id="gymHistory"></div>
     </div>
   </div>
 
