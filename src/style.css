@@ -134,7 +134,7 @@ body {
   80%  { opacity: 0.05; }
   100% { opacity: 0;  transform: scale(1.55); }
 }
-#rain { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+#rain { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
 
 /* ═══════════════════════════════════════════
    THEME BUTTONS
@@ -703,3 +703,167 @@ main {
       var(--bg);
   }
 }
+/* ═══════════════════════════════════════════
+   WEBGL GLASS CANVAS
+   Sits behind everything, renders the live
+   distorted/blurred background for glass effect
+═══════════════════════════════════════════ */
+#glassCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 2;        /* above hex rings (0), same layer as rain (1) → actually below rain */
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  /* The canvas only covers the card areas — we use mix-blend-mode to composite */
+  opacity: 0.92;
+}
+
+/* Cards now sit above the glass canvas */
+main { z-index: 10; }
+
+/* ═══════════════════════════════════════════
+   BIGGER TIME — still fits the square
+═══════════════════════════════════════════ */
+.card-time-sq .label { margin-bottom: 3px; }
+.time-sq {
+  font-size: clamp(1.05rem, 1.9vw, 1.5rem) !important;
+  letter-spacing: -0.03em !important;
+}
+.time-sq .amOrPm {
+  font-size: 0.42rem !important;
+  margin-left: 3px !important;
+}
+
+/* ═══════════════════════════════════════════
+   GYM CARD
+═══════════════════════════════════════════ */
+.card-gym {
+  aspect-ratio: 1;
+  padding: 9px 8px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  cursor: pointer;
+}
+
+.gym-week {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  padding: 2px 0;
+}
+
+.gym-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.gym-day-label {
+  font-size: 0.30rem;
+  letter-spacing: 0.04em;
+  color: var(--txt-d);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.gym-dot {
+  font-size: 0.52rem;
+  line-height: 1;
+  font-family: 'DM Mono', monospace;
+}
+.gym-dot-yes     { color: #86efac; } /* green */
+.gym-dot-no      { color: rgba(255,100,100,0.7); }
+.gym-dot-rest    { color: var(--txt-d); font-size: 0.36rem; }
+.gym-dot-pending { color: var(--txt-d); }
+.gym-today .gym-day-label { color: var(--lav); font-weight: 500; }
+.gym-today .gym-dot-pending { color: var(--lav); }
+
+.gym-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(134,239,172,0.12);
+  border: 1px solid rgba(134,239,172,0.35);
+  color: #86efac;
+  border-radius: 6px;
+  padding: 3px 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s;
+  flex-shrink: 0;
+  width: 100%;
+}
+.gym-btn:hover { background: rgba(134,239,172,0.22); transform: scale(1.03); }
+
+/* ── Gym Modal ── */
+.gym-week-full {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.gym-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  transition: background 0.2s;
+}
+[data-theme="light"] .gym-row { background: rgba(255,255,255,0.38); }
+.gym-row-today {
+  background: rgba(196,181,253,0.10) !important;
+  border-color: rgba(196,181,253,0.35) !important;
+}
+.gym-row-rest { opacity: 0.55; }
+
+.gym-row-name {
+  font-size: 0.62rem;
+  color: var(--txt);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  min-width: 38px;
+}
+.gym-row-status {
+  font-size: 0.60rem;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+.gym-status-yes     { color: #86efac; }
+.gym-status-no      { color: rgba(255,110,110,0.85); }
+.gym-status-rest    { color: var(--txt-d); }
+.gym-status-pending { color: var(--txt-d); }
+
+.gym-hist {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.gym-hist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 0.56rem;
+  color: var(--txt-d);
+}
+[data-theme="light"] .gym-hist-item { background: rgba(255,255,255,0.40); }
+.gym-hist-count { color: var(--lav); font-family: 'DM Mono', monospace; }

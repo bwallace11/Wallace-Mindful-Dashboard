@@ -11,6 +11,7 @@
   <script src="/src/script.js" type="module" defer></script>
 </head>
 <body>
+  <canvas id="glassCanvas"></canvas>
   <canvas id="rain"></canvas>
 
   <!-- Theme -->
@@ -74,11 +75,11 @@
       <input type="file" id="annivUpload" accept="image/*" multiple style="display:none">
     </section>
 
-    <!-- R2 C1: Journaled (was Time) -->
-    <div class="card card-sq card-streak-sq" aria-label="Days Journaled">
-      <span class="label">Journaled</span>
-      <time class="streakOfDays stat-num">—</time>
-      <span class="stat-unit">days</span>
+    <!-- R2 C1: Gym Log -->
+    <div class="card card-sq card-gym" aria-label="Gym Log" id="gymCard">
+      <span class="label">Gym</span>
+      <div class="gym-week" id="gymWeek"></div>
+      <button class="gym-btn" id="gymLogBtn">I went!</button>
     </div>
 
     <!-- R2 C2: Time (was Journaled) -->
@@ -248,6 +249,20 @@
       </div>
       <span class="sec-label">History</span>
       <div class="water-hist" id="waterHistory"></div>
+    </div>
+  </div>
+
+
+  <!-- Gym Log Modal -->
+  <div class="modal-overlay" id="gymModal" style="z-index:150">
+    <div class="modal-glass modal-sm">
+      <button class="modal-x" id="gymModalClose">✕</button>
+      <div class="modal-title">🏋️ Gym Log</div>
+      <div class="gym-week-full" id="gymWeekFull"></div>
+      <div class="gym-history-section">
+        <span class="sec-label" style="margin-top:14px;display:block">Past Weeks</span>
+        <div class="gym-hist" id="gymHistory"></div>
+      </div>
     </div>
   </div>
 
