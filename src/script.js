@@ -284,7 +284,6 @@ $('annivUpload').addEventListener('change', e => {
 ════════════════════════════════════ */
 const GYM_DAYS   = new Set([1,2,4,5,6]);
 const DAY_SHORT  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const DAY_SINGLE = ['S','M','T','W','T','F','S'];
 
 function getWeekKey(date=new Date()) {
   const d=new Date(date); d.setHours(0,0,0,0); d.setDate(d.getDate()-d.getDay()); return d.toISOString().slice(0,10);

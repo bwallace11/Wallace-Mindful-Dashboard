@@ -11,7 +11,6 @@
 :root, [data-theme="dark"] {
   --bg:        #07000f;
   --lav:       #c4b5fd;
-  --lav-dim:   rgba(196,181,253,.55);
   --txt:       rgba(245,240,255,.95);
   --txt-d:     rgba(196,181,253,.60);
 
@@ -27,7 +26,6 @@
 [data-theme="light"] {
   --bg:       #b0a8dc;
   --lav:      #6d28d9;
-  --lav-dim:  rgba(109,40,217,.55);
   --txt:      rgba(12,4,36,.94);
   --txt-d:    rgba(70,30,150,.68);
 
@@ -40,13 +38,13 @@
 }
 
 @media (prefers-color-scheme: light)  { [data-theme="system"] {
-  --bg:#b0a8dc;--lav:#6d28d9;--lav-dim:rgba(109,40,217,.55);
+  --bg:#b0a8dc;--lav:#6d28d9;
   --txt:rgba(12,4,36,.94);--txt-d:rgba(70,30,150,.68);
   --glass-bg:rgba(255,255,255,0.22);--glass-hi:rgba(255,255,255,0.90);--glass-border:rgba(255,255,255,0.70);
   --modal-bg:rgba(238,234,255,0.92);--rain:80,40,180;
 }}
 @media (prefers-color-scheme: dark) { [data-theme="system"] {
-  --bg:#07000f;--lav:#c4b5fd;--lav-dim:rgba(196,181,253,.55);
+  --bg:#07000f;--lav:#c4b5fd;
   --txt:rgba(245,240,255,.95);--txt-d:rgba(196,181,253,.60);
   --glass-bg:rgba(255,255,255,0.08);--glass-hi:rgba(255,255,255,0.55);--glass-border:rgba(255,255,255,0.30);
   --modal-bg:rgba(8,2,24,0.82);--rain:196,181,253;
@@ -78,33 +76,28 @@ body {
     var(--bg);
 }}
 
-/* ── Hex rings + Rain ── */
-.hex-rings { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-.hex-rings svg { position:absolute; left:-52%; top:50%; transform:translateY(-50%); width:110vh; height:110vh; }
-.hex-ring { fill:none; stroke:rgba(196,181,253,0.12); stroke-width:1.2; transform-origin:50% 50%; animation:rp 3.5s ease-out infinite; }
-[data-theme="light"] .hex-ring { stroke:rgba(109,40,217,0.10); }
-.hex-ring:nth-child(1){animation-delay:0s} .hex-ring:nth-child(2){animation-delay:.4s}
-.hex-ring:nth-child(3){animation-delay:.8s} .hex-ring:nth-child(4){animation-delay:1.2s}
-.hex-ring:nth-child(5){animation-delay:1.6s} .hex-ring:nth-child(6){animation-delay:2s}
-.hex-ring:nth-child(7){animation-delay:2.4s} .hex-ring:nth-child(8){animation-delay:2.8s}
-@keyframes rp { 0%{opacity:0;transform:scale(.55)} 15%{opacity:1} 80%{opacity:.05} 100%{opacity:0;transform:scale(1.55)} }
 #rain { position:fixed; inset:0; z-index:1; pointer-events:none; }
 
 /* ── Theme buttons ── */
 .theme-panel { position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:50; display:flex; flex-direction:column; gap:8px; }
 .theme-btn {
-  width:34px; height:34px; border-radius:50%;
+  width:42px; height:42px; border-radius:50%;
   background: rgba(255,255,255,0.10);
   border:1px solid rgba(255,255,255,0.30);
   backdrop-filter: blur(12px) saturate(140%);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   box-shadow: inset 1px 1px 1px rgba(255,255,255,0.45), 0 4px 14px rgba(0,0,0,0.28);
-  color:var(--txt); font-size:.85rem; cursor:pointer;
+  cursor:pointer; padding:0; overflow:hidden;
   display:flex; align-items:center; justify-content:center;
-  transition: transform .15s, background .2s;
+  transition: transform .15s, box-shadow .2s;
 }
-.theme-btn:hover { transform:scale(1.1); background:rgba(255,255,255,0.16); }
-.theme-btn.active { border-color:var(--lav); box-shadow:0 0 0 2px var(--lav), inset 1px 1px 1px rgba(255,255,255,0.45); }
+.theme-btn img {
+  width:100%; height:100%; object-fit:cover;
+  border-radius:50%;
+  display:block;
+}
+.theme-btn:hover { transform:scale(1.12); }
+.theme-btn.active { box-shadow:0 0 0 2.5px var(--lav), inset 1px 1px 1px rgba(255,255,255,0.45), 0 4px 14px rgba(0,0,0,0.28); }
 
 /* ═══════════════════════════════════════════════════════
    ✦ LIQUID GLASS CARD — snipzy.dev method ✦
@@ -615,5 +608,4 @@ main {
   .gym-grad-divider { width:100%; height:1px; margin: 10px 0; }
   .grad-section { width:100%; flex-direction:row; justify-content:center; gap:8px; }
   .theme-panel { flex-direction:row; right:auto; bottom:16px; top:auto; left:50%; transform:translateX(-50%); }
-  .hex-rings { display:none; }
 }
