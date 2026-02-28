@@ -179,10 +179,9 @@ main {
   width: 92%; max-width: 960px;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: auto auto auto;
+  grid-template-rows: 200px 160px 200px;
   gap: 10px;
   padding: 24px 0;
-  /* Every cell is locked to its row — nothing can push siblings */
   align-items: stretch;
 }
 
