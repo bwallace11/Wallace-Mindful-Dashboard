@@ -132,19 +132,7 @@
       <input type="file" id="annivUpload" accept="image/*" multiple style="display:none">
     </section>
 
-    <!-- ── ROW 2 C1 : Graduation (swapped with Time) ── -->
-    <div class="card card-sq card-grad-sq" aria-label="Graduation">
-      <div class="glass-filter"></div>
-      <div class="glass-overlay"></div>
-      <div class="glass-specular"></div>
-      <div class="card-content sq-content">
-        <span class="label">Graduation</span>
-        <time class="daysUntilEvent stat-num">—</time>
-        <span class="stat-unit">days left</span>
-      </div>
-    </div>
-
-    <!-- ── ROW 2 C2 : Time (swapped with Graduation, big) ── -->
+    <!-- ── ROW 2 C1 : Time (big) ── -->
     <div class="card card-sq card-time-sq" aria-label="Time">
       <div class="glass-filter"></div>
       <div class="glass-overlay"></div>
@@ -157,8 +145,8 @@
       </div>
     </div>
 
-    <!-- ── ROW 2 C3-4 : Gym + Graduation combined ── -->
-    <div class="card card-gym-grad" aria-label="Gym Log" id="gymCard">
+    <!-- ── ROW 2 C2-4 : Gym + Graduation combined ── -->
+    <div class="card card-gym-grad" aria-label="Gym &amp; Graduation" id="gymCard">
       <div class="glass-filter"></div>
       <div class="glass-overlay"></div>
       <div class="glass-specular"></div>
@@ -167,6 +155,12 @@
           <span class="label">Gym Log</span>
           <div class="gym-week" id="gymWeek"></div>
           <button class="gym-btn" id="gymLogBtn">I went today! 💪</button>
+        </div>
+        <div class="gym-grad-divider"></div>
+        <div class="grad-section">
+          <span class="label">Graduation</span>
+          <time class="daysUntilEvent stat-num">—</time>
+          <span class="stat-unit">days left</span>
         </div>
       </div>
     </div>
