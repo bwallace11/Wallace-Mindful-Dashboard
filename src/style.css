@@ -228,7 +228,7 @@ main {
 .lib-card-title {
   font-size: .60rem; font-family: 'Melodrama', serif;
   color: var(--txt); padding: 6px 8px 2px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .lib-card-author { font-size: .42rem; font-family: 'DM Mono', monospace; color: var(--txt-d); padding: 0 8px 4px; }
 .lib-card-prog { height: 3px; background: oklch(100% 0 0 / 0.10); margin: 0 8px 6px; border-radius: 3px; }
