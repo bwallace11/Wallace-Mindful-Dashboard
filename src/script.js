@@ -3,7 +3,7 @@ import { getDaysUntilEvent } from './daysTillEvent.js';
 import { initRain }          from './rain.js';
 
 /* ════════════════════════════════════
-   LOCALSTORAGE — everything persisted
+   LOCALSTORAGE
 ════════════════════════════════════ */
 const LS = {
   get: (k, fb=null) => { try { const v=localStorage.getItem(k); return v!==null ? JSON.parse(v) : fb; } catch { return fb; } },
@@ -31,44 +31,27 @@ document.querySelectorAll('.theme-btn').forEach(btn => {
     html.setAttribute('data-theme', theme); LS.set('pom_theme', theme); rainLight();
     document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    setTimeout(() => drawMoon($('moonCanvas'), getMoonPhase(new Date())), 60);
   });
 });
 
 /* ════════════════════════════════════
-   MOUSE HOVER — liquid glass interactivity (snipzy.dev JS)
+   LIQUID GLASS INTERACTIVITY
 ════════════════════════════════════ */
 function initGlassInteractivity() {
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('mousemove', function(e) {
       const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      /* Shift displacement scale based on cursor position */
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
       const dispMap = document.querySelector('#glassDispMap');
-      if (dispMap) {
-        const scale = 40 + (x / rect.width) * 60;
-        dispMap.setAttribute('scale', Math.min(scale, 90));
-      }
-
-      /* Roving specular highlight follows mouse */
-      const specular = this.querySelector('.glass-specular');
-      if (specular) {
-        specular.style.background = `radial-gradient(
-          circle at ${x}px ${y}px,
-          rgba(255,255,255,0.18) 0%,
-          rgba(255,255,255,0.06) 35%,
-          rgba(255,255,255,0) 65%
-        )`;
-      }
+      if (dispMap) dispMap.setAttribute('scale', Math.min(40 + (x/rect.width)*60, 90));
+      const spec = this.querySelector('.glass-specular');
+      if (spec) spec.style.background = `radial-gradient(circle at ${x}px ${y}px, oklch(100% 0 0 / 0.18) 0%, oklch(100% 0 0 / 0.06) 35%, oklch(100% 0 0 / 0) 65%)`;
     });
-
     card.addEventListener('mouseleave', function() {
       const dispMap = document.querySelector('#glassDispMap');
       if (dispMap) dispMap.setAttribute('scale', '70');
-      const specular = this.querySelector('.glass-specular');
-      if (specular) specular.style.background = '';
+      const spec = this.querySelector('.glass-specular');
+      if (spec) spec.style.background = '';
     });
   });
 }
@@ -156,16 +139,13 @@ $('calModalClose').addEventListener('click',()=>$('calModal').classList.remove('
 $('calModal').addEventListener('click',e=>{ if(e.target===$('calModal')) $('calModal').classList.remove('open'); });
 
 /* ════════════════════════════════════
-   STATS
+   GRADUATION COUNTDOWN
 ════════════════════════════════════ */
 const graduationEl = document.querySelector('.daysUntilEvent');
 if (graduationEl) graduationEl.textContent = getDaysUntilEvent('2026-06-15');
 
 /* ════════════════════════════════════
    ANNIVERSARY SLIDESHOW
-   Persisted: pom_anniv_photos  [{dataURL}]
-   + Add button   → opens file picker, appends photos
-   + Remove button → removes current photo
 ════════════════════════════════════ */
 let annivPhotos = LS.get('pom_anniv_photos', []);
 let annivIdx = 0, annivTimer = null;
@@ -174,127 +154,60 @@ const START_DATE = new Date('2022-04-20');
 $('annivYears').textContent = ((new Date()-START_DATE)/(1000*60*60*24*365.25)).toFixed(1);
 
 function updateAnnivCounter() {
-  const ctr = $('annivCounter');
-  if (!ctr) return;
-  if (annivPhotos.length > 1) {
-    ctr.textContent = `${annivIdx+1} / ${annivPhotos.length}`;
-    ctr.classList.add('visible');
-  } else {
-    ctr.classList.remove('visible');
-  }
+  const ctr = $('annivCounter'); if (!ctr) return;
+  if (annivPhotos.length > 1) { ctr.textContent = `${annivIdx+1} / ${annivPhotos.length}`; ctr.classList.add('visible'); }
+  else { ctr.classList.remove('visible'); }
 }
-
 function showSlide(idx) {
-  const img = $('annivImg');
-  const placeholder = $('annivPlaceholder');
-  const dotsEl = $('annivDots');
-
-  if (!annivPhotos.length) {
-    img.classList.add('hidden');
-    placeholder.style.display = '';
-    dotsEl.innerHTML = '';
-    updateAnnivCounter();
-    return;
-  }
-
-  annivIdx = ((idx % annivPhotos.length) + annivPhotos.length) % annivPhotos.length;
-  img.classList.remove('hidden');
-  placeholder.style.display = 'none';
-  img.style.opacity = '0';
-  img.src = annivPhotos[annivIdx].dataURL;
-  img.onload = () => { img.style.opacity = '1'; };
-
-  // rebuild dots
-  dotsEl.innerHTML = '';
-  annivPhotos.forEach((_, i) => {
-    const d = document.createElement('span');
-    d.className = 'anniv-dot' + (i === annivIdx ? ' on' : '');
-    d.addEventListener('click', () => { showSlide(i); startSlide(); });
-    dotsEl.appendChild(d);
-  });
-
+  const img=$('annivImg'), ph=$('annivPlaceholder'), dots=$('annivDots');
+  if (!annivPhotos.length) { img.classList.add('hidden'); ph.style.display=''; dots.innerHTML=''; updateAnnivCounter(); return; }
+  annivIdx=((idx%annivPhotos.length)+annivPhotos.length)%annivPhotos.length;
+  img.classList.remove('hidden'); ph.style.display='none'; img.style.opacity='0';
+  img.src=annivPhotos[annivIdx].dataURL; img.onload=()=>{ img.style.opacity='1'; };
+  dots.innerHTML='';
+  annivPhotos.forEach((_,i)=>{ const d=document.createElement('span'); d.className='anniv-dot'+(i===annivIdx?' on':''); d.addEventListener('click',()=>{showSlide(i);startSlide();}); dots.appendChild(d); });
   updateAnnivCounter();
 }
-
 function startSlide() {
   clearInterval(annivTimer);
-  if (annivPhotos.length > 1) {
-    annivTimer = setInterval(() => showSlide(annivIdx + 1), 4000);
-  }
+  if (annivPhotos.length > 1) annivTimer = setInterval(()=>showSlide(annivIdx+1), 4000);
 }
+showSlide(0); startSlide();
 
-// init on load
-showSlide(0);
-startSlide();
-
-// Prev / Next arrows
-$('annivPrev').addEventListener('click', e => {
-  e.stopPropagation();
-  showSlide(annivIdx - 1);
-  startSlide();
+$('annivPrev').addEventListener('click',e=>{ e.stopPropagation(); showSlide(annivIdx-1); startSlide(); });
+$('annivNext').addEventListener('click',e=>{ e.stopPropagation(); showSlide(annivIdx+1); startSlide(); });
+$('annivAddBtn').addEventListener('click',e=>{ e.stopPropagation(); $('annivUpload').click(); });
+$('annivRemoveBtn').addEventListener('click',e=>{
+  e.stopPropagation(); if(!annivPhotos.length) return;
+  annivPhotos.splice(annivIdx,1); LS.set('pom_anniv_photos',annivPhotos);
+  showSlide(Math.max(0,annivIdx-1)); startSlide();
 });
-$('annivNext').addEventListener('click', e => {
-  e.stopPropagation();
-  showSlide(annivIdx + 1);
-  startSlide();
-});
-
-// ＋ Add button — always appends, never overwrites
-$('annivAddBtn').addEventListener('click', e => {
-  e.stopPropagation();
-  $('annivUpload').click();
-});
-
-// ✕ Remove button — removes current photo
-$('annivRemoveBtn').addEventListener('click', e => {
-  e.stopPropagation();
-  if (!annivPhotos.length) return;
-  annivPhotos.splice(annivIdx, 1);
-  LS.set('pom_anniv_photos', annivPhotos);
-  // jump to prev or 0, keeps slideshow intact
-  showSlide(Math.max(0, annivIdx - 1));
-  startSlide();
-});
-
-// File input handler — reads all selected files, pushes to array, saves
-$('annivUpload').addEventListener('change', e => {
-  const files = Array.from(e.target.files);
-  if (!files.length) return;
-  let loaded = 0;
-  files.forEach(f => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      annivPhotos.push({ dataURL: ev.target.result });
-      loaded++;
-      if (loaded === files.length) {
-        LS.set('pom_anniv_photos', annivPhotos);
-        showSlide(annivPhotos.length - 1);
-        startSlide();
-      }
+$('annivUpload').addEventListener('change',e=>{
+  const files=Array.from(e.target.files); if(!files.length) return;
+  let loaded=0;
+  files.forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      annivPhotos.push({dataURL:ev.target.result}); loaded++;
+      if(loaded===files.length){ LS.set('pom_anniv_photos',annivPhotos); showSlide(annivPhotos.length-1); startSlide(); }
     };
     reader.readAsDataURL(f);
   });
-  e.target.value = ''; // reset so same file can be re-added
+  e.target.value='';
 });
 
 /* ════════════════════════════════════
-   GYM LOG — persisted: pom_gym
-   Days: Mon(1) Tue(2) Thu(4) Fri(5) Sat(6)
-   Resets each new week (Sun=week start)
+   GYM LOG
 ════════════════════════════════════ */
-const GYM_DAYS   = new Set([1,2,4,5,6]);
-const DAY_SHORT  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const GYM_DAYS  = new Set([1,2,4,5,6]);
+const DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 function getWeekKey(date=new Date()) {
   const d=new Date(date); d.setHours(0,0,0,0); d.setDate(d.getDate()-d.getDay()); return d.toISOString().slice(0,10);
 }
-
 let gymData = LS.get('pom_gym',{});
-function pruneGym() {
-  const keys=Object.keys(gymData).sort(); if(keys.length>8) keys.slice(0,keys.length-8).forEach(k=>delete gymData[k]); LS.set('pom_gym',gymData);
-}
+function pruneGym() { const keys=Object.keys(gymData).sort(); if(keys.length>8) keys.slice(0,keys.length-8).forEach(k=>delete gymData[k]); LS.set('pom_gym',gymData); }
 pruneGym();
-
 function getThisWeek() { const k=getWeekKey(); if(!gymData[k]){gymData[k]={};LS.set('pom_gym',gymData);} return gymData[k]; }
 
 function buildGymWidget() {
@@ -305,53 +218,45 @@ function buildGymWidget() {
     const cell=document.createElement('div'); cell.className='gym-cell';
     if(isToday) cell.classList.add('gym-today');
     if(!isGym)  cell.classList.add('gym-rest');
-
     const lbl=document.createElement('span'); lbl.className='gym-day-label'; lbl.textContent=DAY_SHORT[d].slice(0,2);
     const dot=document.createElement('span'); dot.className='gym-dot';
-    if(!isGym)           { dot.textContent='—'; dot.classList.add('gym-dot-rest'); }
-    else if(logged===true) { dot.textContent='✓'; dot.classList.add('gym-dot-yes'); }
-    else if(logged===false){ dot.textContent='✗'; dot.classList.add('gym-dot-no'); }
-    else                   { dot.textContent='·'; dot.classList.add('gym-dot-pending'); }
-
+    if(!isGym)              { dot.textContent='—'; dot.classList.add('gym-dot-rest'); }
+    else if(logged===true)  { dot.textContent='✓'; dot.classList.add('gym-dot-yes'); }
+    else if(logged===false) { dot.textContent='✗'; dot.classList.add('gym-dot-no'); }
+    else                    { dot.textContent='·'; dot.classList.add('gym-dot-pending'); }
     cell.appendChild(lbl); cell.appendChild(dot); el.appendChild(cell);
   }
 }
-
 function buildGymModal() {
   const week=getThisWeek(), todayDow=new Date().getDay(), el=$('gymWeekFull');
   el.innerHTML='';
   for(let d=0;d<7;d++){
     const isGym=GYM_DAYS.has(d), isToday=d===todayDow, logged=week[d];
-    /* auto-mark missed past gym days */
     if(isGym && logged===undefined && d<todayDow){ week[d]=false; LS.set('pom_gym',gymData); }
     const row=document.createElement('div'); row.className='gym-row'+(isToday?' gym-row-today':'')+((!isGym)?' gym-row-rest':'');
     const name=document.createElement('span'); name.className='gym-row-name'; name.textContent=DAY_SHORT[d];
     const status=document.createElement('span'); status.className='gym-row-status';
-    if(!isGym)               { status.textContent='Rest day 😴'; status.classList.add('gym-status-rest'); }
-    else if(logged===true)   { status.textContent='✓ Went!'; status.classList.add('gym-status-yes'); }
-    else if(logged===false)  { status.textContent='✗ Missed'; status.classList.add('gym-status-no'); }
-    else if(isToday)         { status.textContent='Did you go today?'; status.classList.add('gym-status-pending'); }
-    else if(d<todayDow)      { status.textContent='— Missed'; status.classList.add('gym-status-no'); }
-    else                     { status.textContent='Upcoming'; status.classList.add('gym-status-pending'); }
+    if(!isGym)              { status.textContent='Rest day 😴'; status.classList.add('gym-status-rest'); }
+    else if(logged===true)  { status.textContent='✓ Went!'; status.classList.add('gym-status-yes'); }
+    else if(logged===false) { status.textContent='✗ Missed'; status.classList.add('gym-status-no'); }
+    else if(isToday)        { status.textContent='Did you go today?'; status.classList.add('gym-status-pending'); }
+    else if(d<todayDow)     { status.textContent='— Missed'; status.classList.add('gym-status-no'); }
+    else                    { status.textContent='Upcoming'; status.classList.add('gym-status-pending'); }
     row.appendChild(name); row.appendChild(status); el.appendChild(row);
   }
-  /* History */
   const hist=$('gymHistory'); hist.innerHTML='';
   const pastKeys=Object.keys(gymData).sort().reverse().filter(k=>k!==getWeekKey()).slice(0,8);
   if(!pastKeys.length){ const p=document.createElement('p'); p.style.cssText='font-size:.55rem;color:var(--txt-d);text-align:center;padding:10px 0'; p.textContent='No past weeks yet.'; hist.appendChild(p); }
   pastKeys.forEach(k=>{ const w=gymData[k]; const went=[1,2,4,5,6].filter(d=>w[d]===true).length; const date=new Date(k); const lbl=date.toLocaleDateString('en-US',{month:'short',day:'numeric'}); const item=document.createElement('div'); item.className='gym-hist-item'; item.innerHTML=`<span>Week of ${lbl}</span><span class="gym-hist-count">${went}/5 days</span>`; hist.appendChild(item); });
 }
-
 $('gymLogBtn').addEventListener('click',e=>{
   e.stopPropagation();
-  const todayDow=new Date().getDay();
-  const week=getThisWeek();
+  const todayDow=new Date().getDay(), week=getThisWeek();
   if(!GYM_DAYS.has(todayDow)){ buildGymModal(); $('gymModal').classList.add('open'); return; }
   week[todayDow]=true; gymData[getWeekKey()]=week; LS.set('pom_gym',gymData);
   buildGymWidget(); buildGymModal();
-  /* quick visual flash on the cell */
   const cells=$('gymWeek').querySelectorAll('.gym-cell');
-  if(cells[todayDow]){ cells[todayDow].style.background='rgba(134,239,172,0.22)'; setTimeout(()=>cells[todayDow].style.background='',800); }
+  if(cells[todayDow]){ cells[todayDow].style.background='oklch(88% 0.14 155 / 0.22)'; setTimeout(()=>cells[todayDow].style.background='',800); }
 });
 $('gymCard').addEventListener('click',()=>{ buildGymModal(); $('gymModal').classList.add('open'); });
 $('gymModalClose').addEventListener('click',()=>$('gymModal').classList.remove('open'));
@@ -359,7 +264,7 @@ $('gymModal').addEventListener('click',e=>{ if(e.target===$('gymModal')) $('gymM
 buildGymWidget();
 
 /* ════════════════════════════════════
-   WATER WIDGET — persisted: pom_water
+   WATER WIDGET
 ════════════════════════════════════ */
 const todayStr=()=>{ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; };
 let waterData=LS.get('pom_water',{}), waterGoal=waterData.goal||64;
@@ -398,33 +303,7 @@ async function loadFox(){
 loadFox(); $('foxCard').addEventListener('click',loadFox);
 
 /* ════════════════════════════════════
-   MOON
-════════════════════════════════════ */
-function getMoonPhase(date){
-  const known=new Date('2000-01-06T18:14:00Z'), diff=(date-known)/864e5, cycle=29.53059;
-  const age=((diff%cycle)+cycle)%cycle;
-  const phases=[{name:'New Moon',emoji:'🌑',range:[0,1.85]},{name:'Waxing Crescent',emoji:'🌒',range:[1.85,7.38]},{name:'First Quarter',emoji:'🌓',range:[7.38,9.22]},{name:'Waxing Gibbous',emoji:'🌔',range:[9.22,14.77]},{name:'Full Moon',emoji:'🌕',range:[14.77,16.61]},{name:'Waning Gibbous',emoji:'🌖',range:[16.61,22.15]},{name:'Last Quarter',emoji:'🌗',range:[22.15,24]},{name:'Waning Crescent',emoji:'🌘',range:[24,29.53]}];
-  const ph=phases.find(p=>age>=p.range[0]&&age<p.range[1])||phases[0];
-  const illum=age<=14.77?Math.round(age/14.77*100):Math.round((29.53-age)/14.77*100);
-  let dtf=14.77-age; if(dtf<0)dtf+=29.53;
-  return{...ph,age:Math.round(age),illum,daysToFull:Math.ceil(dtf)};
-}
-function drawMoon(canvas,phase){
-  const ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=W/2-4;
-  ctx.clearRect(0,0,W,H);
-  const lt=html.getAttribute('data-theme')==='light'||(html.getAttribute('data-theme')==='system'&&matchMedia('(prefers-color-scheme:light)').matches);
-  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle=lt?'#e8e0f8':'#d4caf0';ctx.fill();
-  ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.clip();
-  const sc=lt?'rgba(50,15,120,.78)':'rgba(5,0,15,.9)',age=phase.age;
-  if(age<1||age>28){ctx.fillStyle=sc;ctx.fillRect(0,0,W,H);}
-  else if(age<14.77){const ex=Math.cos(Math.PI*(age/14.77))*r;ctx.beginPath();ctx.arc(cx,cy,r,Math.PI/2,-Math.PI/2);ctx.bezierCurveTo(cx+ex,cy-r,cx+ex,cy+r,cx,cy+r);ctx.closePath();ctx.fillStyle=sc;ctx.fill();}
-  else{const ex=Math.cos(Math.PI*((age-14.77)/14.77))*r;ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,Math.PI/2);ctx.bezierCurveTo(cx+ex,cy+r,cx+ex,cy-r,cx,cy-r);ctx.closePath();ctx.fillStyle=sc;ctx.fill();}
-  ctx.restore();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=lt?'rgba(109,40,217,.22)':'rgba(196,181,253,.22)';ctx.lineWidth=1;ctx.stroke();
-}
-(()=>{const canvas=$('moonCanvas'),mn=$('moonName'),md=$('moonDetail'),ph=getMoonPhase(new Date());drawMoon(canvas,ph);mn.textContent=`${ph.emoji} ${ph.name}`;md.innerHTML=`${ph.illum}% illuminated<br>Day ${ph.age} of cycle<br>${ph.daysToFull} days to full`;})();
-
-/* ════════════════════════════════════
-   LIBRARY — persisted: pom_books
+   LIBRARY
 ════════════════════════════════════ */
 $('openLibrary').addEventListener('click',()=>$('libraryModal').classList.add('open'));
 $('libraryClose').addEventListener('click',()=>$('libraryModal').classList.remove('open'));
@@ -461,7 +340,7 @@ $('bookDetailClose').addEventListener('click',()=>$('bookDetailModal').classList
 $('bookDetailModal').addEventListener('click',e=>{if(e.target===$('bookDetailModal'))$('bookDetailModal').classList.remove('open');});
 
 /* ════════════════════════════════════
-   MUSIC — volume persisted: pom_vol
+   MUSIC
 ════════════════════════════════════ */
 const aud=$('audioPlayer'),pBtn=$('musicPlay'),prvBtn=$('musicPrev'),nxtBtn=$('musicNext');
 const volEl=$('musicVolume'),upEl=$('musicUpload'),trkEl=$('musicTrack'),artEl=$('musicArtist');
@@ -479,3 +358,164 @@ pBtn.addEventListener('click',togPlay);
 prvBtn.addEventListener('click',()=>{loadTrack(tidx-1);if(!aud.paused)aud.play();});
 nxtBtn.addEventListener('click',()=>{loadTrack(tidx+1);if(!aud.paused)aud.play();});
 upEl.addEventListener('change',e=>{const was=!plist.length;Array.from(e.target.files).forEach(f=>plist.push({name:f.name.replace(/\.[^.]+$/,''),size:f.size,url:URL.createObjectURL(f)}));if(was&&plist.length)loadTrack(0);e.target.value='';});
+
+/* ════════════════════════════════════
+   MEDICATION TRACKER
+   Storage keys:
+     pom_med_list     — [{id,name,mg,freq,notes}]
+     pom_med_taken    — {YYYY-M-D: true}
+     pom_med_refill   — ISO date string of last pill container refill
+════════════════════════════════════ */
+const FREQ_LABELS = { once:'Once daily', twice:'Twice daily', three:'3× daily', asneeded:'As needed', weekly:'Weekly' };
+const REFILL_DAYS = 14; // remind every 14 days
+const MED_CYAN = 'oklch(78% 0.14 200)';
+
+let medList   = LS.get('pom_med_list',  []);
+let medTaken  = LS.get('pom_med_taken', {});
+let medRefill = LS.get('pom_med_refill', null); // ISO date of last refill
+
+/* ── helpers ── */
+const medTodayKey = () => {
+  const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+};
+const isTakenToday = () => !!medTaken[medTodayKey()];
+
+/* ── refill reminder logic ── */
+function daysSinceRefill() {
+  if (!medRefill) return Infinity;
+  const diff = Date.now() - new Date(medRefill).getTime();
+  return Math.floor(diff / (1000*60*60*24));
+}
+function shouldShowRefill() {
+  // Show if: never refilled, OR >= REFILL_DAYS since last refill
+  // Snooze: user dismissed within last 7 days → stored in pom_med_snooze
+  const snoozedUntil = LS.get('pom_med_snooze_until', null);
+  if (snoozedUntil && Date.now() < new Date(snoozedUntil).getTime()) return false;
+  return daysSinceRefill() >= REFILL_DAYS;
+}
+function updateRefillBanner() {
+  const banner = $('medRefillBanner');
+  banner.classList.toggle('visible', shouldShowRefill());
+}
+function setRefillNow() {
+  medRefill = new Date().toISOString();
+  LS.set('pom_med_refill', medRefill);
+  // Clear snooze
+  LS.set('pom_med_snooze_until', null);
+  updateRefillBanner();
+  updateRefillDisplay();
+}
+function snoozeRefill() {
+  // Snooze for 7 days
+  const snoozeUntil = new Date(Date.now() + 7*24*60*60*1000).toISOString();
+  LS.set('pom_med_snooze_until', snoozeUntil);
+  updateRefillBanner();
+}
+function updateRefillDisplay() {
+  const el = $('medLastRefillDisplay');
+  if (!el) return;
+  if (!medRefill) { el.textContent = 'Never'; return; }
+  const d = new Date(medRefill);
+  el.textContent = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const days = daysSinceRefill();
+  el.textContent += ` (${days}d ago)`;
+}
+
+/* ── week strip (Sun-Sat) ── */
+function buildMedWidget() {
+  const el=$('medWeek'); el.innerHTML='';
+  const todayDow=new Date().getDay();
+  const weekStart=new Date(); weekStart.setHours(0,0,0,0); weekStart.setDate(weekStart.getDate()-todayDow);
+  for(let d=0;d<7;d++){
+    const date=new Date(weekStart); date.setDate(weekStart.getDate()+d);
+    const key=`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    const isToday=d===todayDow, taken=!!medTaken[key], isPast=d<todayDow;
+    const cell=document.createElement('div'); cell.className='med-cell';
+    if(isToday) cell.classList.add('med-today');
+    const lbl=document.createElement('span'); lbl.className='med-day-label'; lbl.textContent=DAY_SHORT[d].slice(0,2);
+    const dot=document.createElement('span'); dot.className='med-dot';
+    if(taken)          { dot.textContent='✓'; dot.classList.add('med-dot-taken'); }
+    else if(isPast)    { dot.textContent='✗'; dot.classList.add('med-dot-missed'); }
+    else               { dot.textContent='·'; dot.classList.add('med-dot-pending'); }
+    cell.appendChild(lbl); cell.appendChild(dot); el.appendChild(cell);
+  }
+  // Button text
+  $('medTakenBtn').textContent = isTakenToday() ? '✓ Taken today' : 'Taken today! 💊';
+  $('medTakenBtn').style.opacity = isTakenToday() ? '0.55' : '1';
+}
+
+/* ── modal med list ── */
+function renderMedList() {
+  const el=$('medList'); el.innerHTML='';
+  if (!medList.length) {
+    el.innerHTML='<p style="font-size:.54rem;color:var(--txt-d);text-align:center;padding:14px 0;font-family:\'DM Mono\',monospace">No medications added yet.</p>';
+    return;
+  }
+  medList.forEach((med,i)=>{
+    const item=document.createElement('div'); item.className='med-item';
+    const freqLabel=FREQ_LABELS[med.freq]||med.freq;
+    item.innerHTML=`
+      <span class="med-item-icon">💊</span>
+      <div class="med-item-info">
+        <div class="med-item-name">${med.name}</div>
+        <div class="med-item-detail">${med.mg} · ${freqLabel}</div>
+        ${med.notes?`<div class="med-item-notes">${med.notes}</div>`:''}
+      </div>
+      <button class="med-item-delete" data-idx="${i}" title="Remove">✕</button>
+    `;
+    el.appendChild(item);
+  });
+  el.querySelectorAll('.med-item-delete').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      medList.splice(+btn.dataset.idx,1);
+      LS.set('pom_med_list',medList);
+      renderMedList();
+    });
+  });
+}
+
+/* ── mark taken today ── */
+$('medTakenBtn').addEventListener('click', e=>{
+  e.stopPropagation();
+  if (isTakenToday()) return; // already logged
+  medTaken[medTodayKey()] = true;
+  LS.set('pom_med_taken', medTaken);
+  buildMedWidget();
+  // flash
+  const cells=$('medWeek').querySelectorAll('.med-cell');
+  const todayDow=new Date().getDay();
+  if(cells[todayDow]){ cells[todayDow].style.background='oklch(78% 0.14 200 / 0.28)'; setTimeout(()=>cells[todayDow].style.background='',900); }
+});
+
+/* ── card opens modal ── */
+$('medCard').addEventListener('click', ()=>{
+  renderMedList();
+  updateRefillDisplay();
+  $('medModal').classList.add('open');
+});
+$('medModalClose').addEventListener('click',()=>$('medModal').classList.remove('open'));
+$('medModal').addEventListener('click',e=>{ if(e.target===$('medModal')) $('medModal').classList.remove('open'); });
+
+/* ── add medication ── */
+$('medAddBtn').addEventListener('click',()=>{
+  const name=$('medNameInput').value.trim();
+  const mg=$('medMgInput').value.trim();
+  if(!name) return;
+  medList.push({ id:Date.now(), name, mg:mg||'—', freq:$('medFreqSelect').value, notes:$('medNotesInput').value.trim() });
+  LS.set('pom_med_list',medList);
+  $('medNameInput').value=''; $('medMgInput').value=''; $('medNotesInput').value='';
+  $('medFreqSelect').value='once';
+  renderMedList();
+});
+$('medNameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('medAddBtn').click(); });
+
+/* ── refill actions ── */
+$('medRefillResetBtn').addEventListener('click',()=>{ setRefillNow(); });
+$('medRefillSnooze').addEventListener('click',e=>{ e.stopPropagation(); snoozeRefill(); });
+
+/* ── init ── */
+buildMedWidget();
+updateRefillBanner();
+
+// Re-check refill reminder every hour in case dashboard stays open
+setInterval(()=>{ updateRefillBanner(); }, 60*60*1000);
