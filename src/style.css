@@ -1,13 +1,5 @@
 /* ═══════════════════════════════════════════
    PEACE OF MIND — style.css
-   Only what Tailwind cannot do:
-   • CSS custom property tokens + theme switching
-   • Body radial-gradient background
-   • @keyframes animations
-   • Complex compound / pseudo selectors
-   • SVG filter + backdrop-filter glass layers
-   • Custom sub-rem font-size values
-   • Grid card placement (arbitrary values)
 ═══════════════════════════════════════════ */
 
 /* ── Design tokens ── */
@@ -46,7 +38,7 @@
   --modal-bg:oklch(8% 0.05 300 / 0.82); --rain:196,181,253;
 }}
 
-/* ── Body background (radial gradient — can't be Tailwind) ── */
+/* ── Body background ── */
 html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 body {
   background:
@@ -56,18 +48,13 @@ body {
   font-family: 'DM Mono', monospace;
   transition: background 0.5s ease;
 }
-[data-theme="light"] body {
+[data-theme="light"] body,
+[data-theme="system"] body {
   background:
     radial-gradient(ellipse 75% 60% at 22% 32%, oklch(75% 0.12 290 / 0.38) 0%, transparent 58%),
     radial-gradient(ellipse 55% 65% at 78% 70%, oklch(40% 0.22 290 / 0.22) 0%, transparent 52%),
     var(--bg);
 }
-@media (prefers-color-scheme: light) { [data-theme="system"] body {
-  background:
-    radial-gradient(ellipse 75% 60% at 22% 32%, oklch(75% 0.12 290 / 0.38) 0%, transparent 58%),
-    radial-gradient(ellipse 55% 65% at 78% 70%, oklch(40% 0.22 290 / 0.22) 0%, transparent 52%),
-    var(--bg);
-}}
 
 /* ── Grid layout ── */
 main {
@@ -91,7 +78,7 @@ main {
 .card-med      { grid-column:3/5; grid-row:1; }
 .card-fox      { grid-column:5/7; grid-row:3; }
 
-/* ── Liquid glass layers (SVG filter + backdrop — can't be Tailwind) ── */
+/* ── Liquid glass layers ── */
 .card {
   position: relative;
   border-radius: 22px;
@@ -121,6 +108,174 @@ main {
   padding: 14px 18px;
   display: flex; flex-direction: column;
 }
+
+/* ════════════════════════════════════
+   CALENDAR — fills full card height
+════════════════════════════════════ */
+.cal-card-content {
+  padding: 10px 12px;
+  gap: 0;
+}
+.cal-grid-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1.5px;
+  flex: 1;
+  align-content: start;
+}
+.cal-day-str { font-size: .42rem; letter-spacing: .04em; color: var(--txt-d); font-family: 'DM Mono', monospace; }
+
+/* ════════════════════════════════════
+   MEDICATION — fills full card height
+════════════════════════════════════ */
+.med-card-content {
+  padding: 12px 14px;
+  gap: 6px;
+}
+.med-week-wrap {
+  flex: 1;
+  min-height: 0;
+}
+#medWeek {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+.med-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: oklch(100% 0 0 / 0.06);
+  border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 10px;
+  padding: 4px 2px;
+}
+
+/* ════════════════════════════════════
+   MUSIC — fills full card height
+════════════════════════════════════ */
+.music-card-content {
+  padding: 12px 14px;
+  gap: 8px;
+}
+
+/* ════════════════════════════════════
+   ANNIVERSARY — fixed-height photo area
+════════════════════════════════════ */
+.anniv-photo-area {
+  /* Take up all flex space between the header & footer */
+  flex: 1;
+  min-height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: oklch(100% 0 0 / 0.05);
+  border: 1px solid oklch(100% 0 0 / 0.15);
+}
+.anniv-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity .5s ease;
+}
+.anniv-img.hidden { display: none; }
+
+/* ════════════════════════════════════
+   LIBRARY (new)
+════════════════════════════════════ */
+.lib-tab {
+  font-size: .44rem;
+  letter-spacing: .10em;
+  background: oklch(100% 0 0 / 0.07);
+  border: 1px solid oklch(100% 0 0 / 0.18);
+  color: var(--txt-d);
+  padding: 5px 12px;
+}
+.lib-tab-active {
+  background: oklch(80% 0.13 300 / 0.18);
+  border-color: oklch(80% 0.13 300 / 0.50);
+  color: var(--lav);
+}
+.lib-tab:hover { background: oklch(100% 0 0 / 0.14); color: var(--txt); }
+
+.lib-book-card {
+  background: oklch(100% 0 0 / 0.07);
+  border: 1px solid oklch(100% 0 0 / 0.18);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .2s, background .2s;
+}
+.lib-book-card:hover { background: oklch(100% 0 0 / 0.14); transform: translateY(-3px); }
+.lib-cover-wrap {
+  width: 100%; aspect-ratio: 2/3;
+  background: oklch(100% 0 0 / 0.06);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.lib-cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lib-cover-placeholder { font-size: 2rem; }
+.lib-card-title {
+  font-size: .60rem; font-family: 'Melodrama', serif;
+  color: var(--txt); padding: 6px 8px 2px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.lib-card-author { font-size: .42rem; font-family: 'DM Mono', monospace; color: var(--txt-d); padding: 0 8px 4px; }
+.lib-card-prog { height: 3px; background: oklch(100% 0 0 / 0.10); margin: 0 8px 6px; border-radius: 3px; }
+.lib-empty-msg { font-size: .56rem; }
+
+/* Search results */
+.lib-search-item {
+  display: flex; align-items: center; gap: 10px;
+  background: oklch(100% 0 0 / 0.07); border: 1px solid oklch(100% 0 0 / 0.15);
+  border-radius: 10px; padding: 8px 10px;
+}
+.lib-search-cover {
+  width: 36px; height: 54px; object-fit: cover;
+  border-radius: 4px; flex-shrink: 0;
+}
+.lib-search-cover-ph {
+  width: 36px; height: 54px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: oklch(100% 0 0 / 0.08); border-radius: 4px; font-size: 1.2rem;
+}
+.lib-search-info { flex: 1; min-width: 0; }
+.lib-search-title { font-size: .62rem; font-family: 'Melodrama', serif; color: var(--txt); }
+.lib-search-author { font-size: .48rem; color: var(--txt-d); font-family: 'DM Mono', monospace; }
+.lib-add-btn {
+  font-size: .42rem; font-family: 'DM Mono', monospace;
+  background: oklch(80% 0.13 300 / 0.14); border: 1px solid oklch(80% 0.13 300 / 0.38);
+  color: var(--lav); border-radius: 7px; padding: 4px 8px; cursor: pointer; white-space: nowrap;
+  transition: background .2s;
+}
+.lib-add-btn:hover { background: oklch(80% 0.13 300 / 0.28); }
+.lib-add-btn-read {
+  background: oklch(88% 0.14 155 / 0.12); border-color: oklch(88% 0.14 155 / 0.38); color: oklch(88% 0.14 155);
+}
+.lib-add-btn-read:hover { background: oklch(88% 0.14 155 / 0.24); }
+
+/* Status buttons in book detail */
+.lib-status-btn {
+  font-size: .44rem; letter-spacing: .08em;
+  background: oklch(100% 0 0 / 0.07); border: 1px solid oklch(100% 0 0 / 0.18);
+  color: var(--txt-d); border-radius: 7px; padding: 4px 10px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.lib-status-btn:hover, .lib-status-active {
+  background: oklch(80% 0.13 300 / 0.18); border-color: oklch(80% 0.13 300 / 0.50); color: var(--lav);
+}
+#statusRemove { color: oklch(80% 0.12 20); background: oklch(65% 0.18 25 / 0.07); border-color: oklch(65% 0.18 25 / 0.35); }
+#statusRemove:hover { background: oklch(65% 0.18 25 / 0.18); }
 
 /* ── Theme panel ── */
 .theme-btn {
@@ -159,7 +314,7 @@ main {
   box-shadow: inset 1px 1px 1px var(--glass-hi), 0 20px 60px oklch(0% 0 0 / 0.55), 0 6px 18px oklch(0% 0 0 / 0.32);
 }
 
-/* ── @keyframes (can't be Tailwind) ── */
+/* ── @keyframes ── */
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes ww { 0%{transform:translateX(0)} 100%{transform:translateX(33.3%)} }
 @keyframes drip { 0%{opacity:1;top:-8px} 80%{opacity:1} 100%{opacity:0;top:100%} }
@@ -168,7 +323,7 @@ main {
 .water-wave { animation: ww 2s linear infinite; }
 .water-drip.dripping { animation: drip .7s ease-in forwards; }
 
-/* ── Sub-rem font sizes (Tailwind doesn't have these tiny sizes) ── */
+/* ── Font sizes ── */
 .label        { font-size: .46rem; letter-spacing: .18em; }
 .label-sm     { font-size: .42rem; letter-spacing: .16em; }
 .stat-unit    { font-size: .40rem; letter-spacing: .14em; }
@@ -224,7 +379,7 @@ main {
 .mb           { font-size: .58rem; }
 .mta          { font-size: .60rem; }
 
-/* ── Color values that reference CSS vars (can't be Tailwind) ── */
+/* ── Color tokens ── */
 body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .anniv-date, .music-artist, .music-time, .water-oz-label,
 .water-big-unit, .bk-author, .gym-day-label, .gym-status-rest,
@@ -237,16 +392,14 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .music-track, .mi, .mta, .cal-day.dot-day { color: var(--txt); }
 
 .stat-unit, .anniv-unit, .cal-month-year, .gym-hist-count,
-.music-vol::-webkit-slider-thumb, .music-vol::-moz-range-thumb,
-.music-upload, .water-mini-fill, .music-bar-fill,
-.progress-fill, .anniv-dot.on, .rdot, .mb { color: var(--lav); }
-
 .music-upload, .mb { color: var(--lav); }
+
 .progress-fill, .water-mini-fill, .music-bar-fill { background: var(--lav); }
 .anniv-dot.on { background: var(--lav); }
 .rdot { background: var(--lav); }
 
-/* ── Complex pseudo / compound selectors ── */
+/* ── Calendar cells ── */
+.cal-day { position: relative; text-align: center; border-radius: 4px; cursor: pointer; padding: 1px 0; }
 .cal-day:hover { background: oklch(100% 0 0 / 0.10); }
 .cal-day.today {
   background: oklch(100% 0 0 / 0.16) !important;
@@ -266,35 +419,41 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 }
 .cal-day.empty { opacity: 0; pointer-events: none; }
 
-.anniv-slide-wrap:hover .anniv-nav { opacity: 1; }
-.anniv-img.hidden { display: none; }
+/* ── Anniversary ── */
+.anniv-slide-wrap:hover .anniv-nav,
+.anniv-photo-area:hover .anniv-nav { opacity: 1; }
 .anniv-counter.visible { display: block; }
 .med-refill-banner.visible { display: flex; }
 
+/* ── Gym ── */
+.gym-cell {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 10px; padding: 4px 2px;
+}
 .gym-cell.gym-today { background: oklch(80% 0.13 300 / 0.14); border-color: oklch(80% 0.13 300 / 0.40); }
 .gym-today .gym-day-label { color: var(--lav); }
 .gym-today .gym-dot-pending { color: var(--lav); }
 .gym-row-today { background: oklch(80% 0.13 300 / 0.12) !important; border-color: oklch(80% 0.13 300 / 0.38) !important; }
-[data-theme="light"] .gym-row { background: oklch(100% 0 0 / 0.40); }
-[data-theme="light"] .gym-hist-item { background: oklch(100% 0 0 / 0.42); }
-[data-theme="light"] .book-card { background: oklch(100% 0 0 / 0.52); border-color: oklch(0% 0 0 / 0.12); }
-[data-theme="light"] .med-item { background: oklch(100% 0 0 / 0.42); }
-[data-theme="light"] .water-glass { border-color: oklch(55% 0.14 230 / 0.40); }
-[data-theme="light"] .mi, [data-theme="light"] .mta, [data-theme="light"] .med-freq-select { background: oklch(100% 0 0 / 0.55); border-color: oklch(0% 0 0 / 0.14); }
-[data-theme="light"] .reminder-item, [data-theme="light"] .whist-item { background: oklch(100% 0 0 / 0.45); }
 
+/* ── Medication cell ── */
 .med-cell.med-today { background: oklch(78% 0.14 200 / 0.14); border-color: oklch(78% 0.14 200 / 0.40); }
 .med-today .med-day-label { color: oklch(78% 0.14 200); }
 .med-today .med-dot-pending { color: oklch(78% 0.14 200); }
 
+/* ── Stars ── */
 .star.on, .star:hover { color: var(--lav); filter: drop-shadow(0 0 4px var(--lav)); }
 .star:hover { transform: scale(1.2); }
+
+/* ── Misc interactive ── */
 .rdel:hover { color: oklch(68% 0.18 5); }
 .spine:hover { opacity: 1; transform: translateY(-3px); }
-.book-card:hover { background: oklch(100% 0 0 / 0.14); transform: translateY(-3px); }
 
+.music-vol { -webkit-appearance: none; appearance: none; outline: none; }
 .music-vol::-webkit-slider-thumb { -webkit-appearance: none; width:10px; height:10px; border-radius:50%; background: var(--lav); cursor:pointer; }
 .music-vol::-moz-range-thumb { width:10px; height:10px; border-radius:50%; background: var(--lav); cursor:pointer; border:none; }
+.music-bar-fill { transition: width 250ms linear; }
 
 .gym-btn:hover  { background: oklch(88% 0.14 155 / 0.22); transform: scale(1.02); }
 .med-btn:hover  { background: oklch(78% 0.14 200 / 0.22); transform: scale(1.02); }
@@ -302,7 +461,6 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .med-reset-btn:hover { background: oklch(78% 0.18 80 / 0.24); }
 .med-refill-snooze:hover { opacity: 1; }
 .modal-x:hover  { background: oklch(100% 0 0 / 0.20); color: var(--txt); }
-.theme-btn:hover { transform: scale(1.12); }
 .anniv-action-btn:hover { background: oklch(100% 0 0 / 0.16); border-color: oklch(100% 0 0 / 0.40); }
 .anniv-action-danger:hover { background: oklch(65% 0.18 25 / 0.18); border-color: oklch(65% 0.18 25 / 0.60); }
 .music-btn:hover { background: oklch(100% 0 0 / 0.15); }
@@ -311,12 +469,21 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .mi:focus, .mta:focus { border-color: var(--lav); outline: none; }
 .mi::placeholder, .mta::placeholder { color: var(--txt-d); opacity: .65; }
 
-/* ── Water glass (custom dimensions + complex border) ── */
+/* ── Light mode overrides ── */
+[data-theme="light"] .gym-row { background: oklch(100% 0 0 / 0.40); }
+[data-theme="light"] .gym-hist-item { background: oklch(100% 0 0 / 0.42); }
+[data-theme="light"] .lib-book-card { background: oklch(100% 0 0 / 0.52); border-color: oklch(0% 0 0 / 0.12); }
+[data-theme="light"] .med-item { background: oklch(100% 0 0 / 0.42); }
+[data-theme="light"] .water-glass { border-color: oklch(55% 0.14 230 / 0.40); }
+[data-theme="light"] .mi, [data-theme="light"] .mta, [data-theme="light"] .med-freq-select { background: oklch(100% 0 0 / 0.55); border-color: oklch(0% 0 0 / 0.14); }
+[data-theme="light"] .reminder-item, [data-theme="light"] .whist-item { background: oklch(100% 0 0 / 0.45); }
+[data-theme="light"] .lib-search-item { background: oklch(100% 0 0 / 0.50); }
+
+/* ── Water glass ── */
 .water-glass {
   width: 30px; height: 44px;
   border: 1.5px solid oklch(82% 0.08 230 / 0.55);
-  border-top: none;
-  border-radius: 2px 2px 6px 6px;
+  border-top: none; border-radius: 2px 2px 6px 6px;
   position: relative; overflow: hidden;
   background: oklch(82% 0.08 230 / 0.03);
 }
@@ -342,7 +509,7 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .water-mini-bar { height: 2px; background: oklch(100% 0 0 / 0.12); border-radius: 10px; }
 .water-mini-fill { height: 100%; width: 0%; border-radius: 10px; transition: width .8s ease; }
 
-/* ── Anniversary nav (absolute positioned) ── */
+/* ── Anniversary nav ── */
 .anniv-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: oklch(0% 0 0 / 0.38); border: none;
@@ -358,13 +525,62 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
   padding: 2px 6px; border-radius: 20px;
   z-index: 3; pointer-events: none; display: none;
 }
-.anniv-img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; display: block; transition: opacity .5s ease;
+
+/* ── Gym/Med shared row styles ── */
+.gym-row, .med-row {
+  display: flex; justify-content: space-between; align-items: center;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 9px; padding: 7px 12px;
+}
+.gym-hist-item {
+  display: flex; justify-content: space-between; align-items: center;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 7px; padding: 5px 10px;
+}
+.gym-hist-count { color: var(--lav); }
+.gym-status-yes  { color: oklch(88% 0.14 155); }
+.gym-status-no   { color: oklch(65% 0.18 5); }
+.med-dot-taken  { color: oklch(78% 0.14 200); }
+.med-dot-missed { color: oklch(65% 0.18 5); }
+.gym-dot-yes { color: oklch(88% 0.14 155); }
+.gym-dot-no  { color: oklch(65% 0.18 5); }
+.gym-cell.gym-rest { opacity: .55; }
+
+/* Medication item */
+.med-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 10px; padding: 9px 12px;
+}
+.med-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+.med-item-info { flex: 1; min-width: 0; }
+.med-item-delete {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--txt-d); font-size: .75rem; padding: 2px 4px;
+  border-radius: 4px; transition: color .15s, background .15s;
+  flex-shrink: 0; margin-top: 1px;
+}
+.med-item-delete:hover { color: oklch(68% 0.18 5); background: oklch(65% 0.18 5 / 0.12); }
+
+/* Reminder item */
+.reminder-item {
+  display: flex; align-items: center; gap: 8px;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 7px; padding: 5px 10px; margin-bottom: 5px;
+}
+.rdot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.rdel {
+  margin-left: auto; background: transparent; border: none;
+  cursor: pointer; color: var(--txt-d); font-size: .8rem;
+  transition: color .15s;
 }
 
-/* ── Music range input (webkit only) ── */
-.music-vol { -webkit-appearance: none; appearance: none; outline: none; }
+/* Whist */
+.whist-item {
+  display: flex; justify-content: space-between; align-items: center;
+  background: oklch(100% 0 0 / 0.06); border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 7px; padding: 5px 10px;
+}
 
 /* ── Mobile ── */
 @media (max-width: 700px) {

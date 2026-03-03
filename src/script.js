@@ -303,41 +303,265 @@ async function loadFox(){
 loadFox(); $('foxCard').addEventListener('click',loadFox);
 
 /* ════════════════════════════════════
-   LIBRARY
+   LIBRARY  (Open Library API)
 ════════════════════════════════════ */
-$('openLibrary').addEventListener('click',()=>$('libraryModal').classList.add('open'));
-$('libraryClose').addEventListener('click',()=>$('libraryModal').classList.remove('open'));
-$('libraryModal').addEventListener('click',e=>{if(e.target===$('libraryModal'))$('libraryModal').classList.remove('open');});
+// Storage: pom_lib_books = [{id, key, title, author, cover, summary, amazonUrl, status, progress, rating}]
+let libBooks = LS.get('pom_lib_books', []);
+let curLibBook = null;
+let libActiveTab = 'reading';
 
-const BOOKS={
-  'night-circus':    {title:'The Night Circus',    author:'Erin Morgenstern', cover:'https://covers.openlibrary.org/b/id/8236055-L.jpg',   s:'Two young magicians are pitted against each other in a mysterious competition set within a magical black-and-white circus. As their rivalry deepens into romance, the stakes grow ever more dangerous.'},
-  'atomic-habits':   {title:'Atomic Habits',        author:'James Clear',      cover:'https://covers.openlibrary.org/b/id/10521270-L.jpg',  s:'Clear explains how tiny changes compound into remarkable results and gives a practical framework for making good habits automatic and bad ones unattractive.'},
-  'dune':            {title:'Dune',                 author:'Frank Herbert',    cover:'https://covers.openlibrary.org/b/id/8370614-L.jpg',   s:'Paul Atreides navigates political intrigue and desert survival on Arrakis, the only source of the most valuable substance in the universe.'},
-  'hobbit':          {title:'The Hobbit',           author:'J.R.R. Tolkien',  cover:'https://covers.openlibrary.org/b/id/6979861-L.jpg',   s:'Bilbo Baggins is swept into an epic quest to reclaim a lost kingdom from the dragon Smaug. A timeless adventure of courage and unexpected heroism.'},
-  'silent-patient':  {title:'The Silent Patient',   author:'Alex Michaelides',cover:'https://covers.openlibrary.org/b/id/9272648-L.jpg',   s:'Alicia Berenson shoots her husband and never speaks again. A psychotherapist becomes obsessed with uncovering her motive.'},
-  'midnight-library':{title:'The Midnight Library', author:'Matt Haig',       cover:'https://covers.openlibrary.org/b/id/10410782-L.jpg',  s:'Between life and death exists a library of infinite books, each a different life. Nora must decide which life is truly worth living.'},
-  'gone-girl':       {title:'Gone Girl',            author:'Gillian Flynn',   cover:'https://covers.openlibrary.org/b/id/8371112-L.jpg',   s:'Amy Dunne disappears on her anniversary. Unreliable narrators dissect marriage, media, and the psychology of deception.'},
-  'martian':         {title:'The Martian',          author:'Andy Weir',       cover:'https://covers.openlibrary.org/b/id/8391800-L.jpg',   s:'Mark Watney is stranded alone on Mars. Armed with botany, ingenuity, and dark humor, he must survive and signal NASA.'}
-};
-let bkState=LS.get('pom_books',{}); Object.keys(BOOKS).forEach(k=>{if(!bkState[k])bkState[k]={rating:0,link:''};});
-let curBook=null;
-function openBook(key){
-  const bk=BOOKS[key],st=bkState[key]; if(!bk) return; curBook=key;
-  $('bookDetailTitle').textContent=bk.title; $('bookDetailAuthor').textContent=bk.author; $('bookSummaryText').textContent=bk.s;
-  const cov=$('bookCover'); cov.innerHTML=''; const img=new Image(); img.src=bk.cover; img.alt=bk.title; img.onerror=()=>{cov.innerHTML='📖';}; cov.appendChild(img);
-  document.querySelectorAll('.star').forEach(s=>s.classList.toggle('on',+s.dataset.star<=st.rating));
-  $('bookLinkInput').value=st.link; $('bookDetailModal').classList.add('open');
+/* ── Open Library helpers ── */
+async function searchBooks(query) {
+  const r = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8&fields=key,title,author_name,cover_i,first_sentence`);
+  const d = await r.json();
+  return d.docs || [];
 }
-document.querySelectorAll('.book-card').forEach(c=>c.addEventListener('click',()=>openBook(c.dataset.book)));
-document.querySelectorAll('.star').forEach(star=>{
-  star.addEventListener('click',()=>{ const n=+star.dataset.star; if(!curBook) return; bkState[curBook].rating=n; LS.set('pom_books',bkState); document.querySelectorAll('.star').forEach(s=>s.classList.toggle('on',+s.dataset.star<=n)); });
-  star.addEventListener('mouseenter',()=>{ const n=+star.dataset.star; document.querySelectorAll('.star').forEach(s=>s.style.color=+s.dataset.star<=n?'var(--lav)':''); });
-  star.addEventListener('mouseleave',()=>document.querySelectorAll('.star').forEach(s=>s.style.color=''));
+async function getBookSummary(olKey) {
+  try {
+    const r = await fetch(`https://openlibrary.org${olKey}.json`);
+    const d = await r.json();
+    if (d.description) return typeof d.description === 'string' ? d.description : d.description.value;
+    if (d.first_sentence) return typeof d.first_sentence === 'string' ? d.first_sentence : d.first_sentence.value;
+  } catch {}
+  return null;
+}
+function buildAmazonUrl(title, author) {
+  const q = encodeURIComponent(`${title} ${author}`);
+  return `https://www.amazon.com/s?k=${q}&i=stripbooks`;
+}
+
+/* ── Widget update ── */
+function updateLibWidget() {
+  const reading = libBooks.filter(b => b.status === 'reading');
+  const cur = reading[0];
+  if (cur) {
+    $('libCurrentTitle').textContent = cur.title;
+    $('libCurrentAuthor').textContent = cur.author;
+    $('libProgressFill').style.width = (cur.progress || 0) + '%';
+    $('libProgressLabel').textContent = (cur.progress || 0) + '% complete';
+  } else {
+    $('libCurrentTitle').textContent = 'No book selected';
+    $('libCurrentAuthor').textContent = '—';
+    $('libProgressFill').style.width = '0%';
+    $('libProgressLabel').textContent = '0% complete';
+  }
+  // Spines
+  const spines = $('libSpines'); spines.innerHTML = '';
+  const colors = ['oklch(62% 0.18 25)','oklch(72% 0.14 155)','oklch(65% 0.16 260)','oklch(75% 0.14 90)','oklch(65% 0.18 310)'];
+  libBooks.slice(0,5).forEach((b,i) => {
+    const s = document.createElement('div');
+    s.className = 'spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200';
+    s.style.background = colors[i % colors.length];
+    spines.appendChild(s);
+  });
+}
+
+/* ── Render library grid ── */
+function renderLibGrid() {
+  const grid = $('libGrid'), empty = $('libEmptyMsg');
+  grid.innerHTML = '';
+  const filtered = libBooks.filter(b => b.status === libActiveTab);
+  if (!filtered.length) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  filtered.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'lib-book-card cursor-pointer';
+    card.innerHTML = `
+      <div class="lib-cover-wrap">
+        ${b.cover ? `<img src="${b.cover}" alt="${b.title}" class="lib-cover-img"/>` : `<div class="lib-cover-placeholder">📖</div>`}
+      </div>
+      <p class="lib-card-title">${b.title}</p>
+      <p class="lib-card-author">${b.author}</p>
+      ${b.status==='reading' ? `<div class="lib-card-prog"><div style="width:${b.progress||0}%;height:100%;background:var(--lav);border-radius:3px;transition:width .3s"></div></div>` : ''}
+    `;
+    card.addEventListener('click', () => openBookDetail(b.id));
+    grid.appendChild(card);
+  });
+}
+
+/* ── Tab switching ── */
+document.querySelectorAll('.lib-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    libActiveTab = btn.dataset.tab;
+    document.querySelectorAll('.lib-tab').forEach(b => b.classList.remove('lib-tab-active'));
+    btn.classList.add('lib-tab-active');
+    renderLibGrid();
+  });
 });
-$('bookLinkInput').addEventListener('input',()=>{if(curBook){bkState[curBook].link=$('bookLinkInput').value;LS.set('pom_books',bkState);}});
-$('bookLinkOpen').addEventListener('click',()=>{const u=$('bookLinkInput').value.trim();if(u)window.open(u.startsWith('http')?u:'https://'+u,'_blank');});
-$('bookDetailClose').addEventListener('click',()=>$('bookDetailModal').classList.remove('open'));
-$('bookDetailModal').addEventListener('click',e=>{if(e.target===$('bookDetailModal'))$('bookDetailModal').classList.remove('open');});
+
+/* ── Search ── */
+$('libSearchBtn').addEventListener('click', doLibSearch);
+$('libSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doLibSearch(); });
+
+async function doLibSearch() {
+  const q = $('libSearchInput').value.trim();
+  if (!q) return;
+  const btn = $('libSearchBtn');
+  btn.textContent = '⏳ Searching…'; btn.disabled = true;
+  try {
+    const results = await searchBooks(q);
+    renderSearchResults(results);
+  } catch { renderSearchResults([]); }
+  btn.textContent = 'Search 🔍'; btn.disabled = false;
+}
+
+function renderSearchResults(docs) {
+  const wrap = $('libSearchResults');
+  wrap.innerHTML = '';
+  if (!docs.length) {
+    wrap.innerHTML = '<p class="font-mono text-[var(--txt-d)] text-center py-3" style="font-size:.54rem">No results found.</p>';
+    wrap.classList.remove('hidden');
+    return;
+  }
+  wrap.classList.remove('hidden');
+  docs.forEach(doc => {
+    const title = doc.title || 'Unknown Title';
+    const author = doc.author_name?.[0] || 'Unknown Author';
+    const coverId = doc.cover_i;
+    const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : null;
+
+    const item = document.createElement('div');
+    item.className = 'lib-search-item';
+    item.innerHTML = `
+      ${coverUrl ? `<img src="${coverUrl}" class="lib-search-cover" alt="${title}"/>` : '<div class="lib-search-cover-ph">📖</div>'}
+      <div class="lib-search-info">
+        <div class="lib-search-title">${title}</div>
+        <div class="lib-search-author">${author}</div>
+      </div>
+      <div class="flex gap-1 flex-shrink-0">
+        <button class="lib-add-btn" data-status="reading">📖 Reading</button>
+        <button class="lib-add-btn lib-add-btn-read" data-status="read">✅ Read</button>
+      </div>
+    `;
+    item.querySelectorAll('.lib-add-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        btn.textContent = '⏳'; btn.disabled = true;
+        // Fetch full summary
+        let summary = null;
+        if (doc.key) summary = await getBookSummary(doc.key);
+        if (!summary && doc.first_sentence) summary = typeof doc.first_sentence==='string' ? doc.first_sentence : doc.first_sentence.value;
+        if (!summary) summary = 'No summary available for this book.';
+        const book = {
+          id: Date.now() + Math.random(),
+          key: doc.key || '',
+          title,
+          author,
+          cover: coverUrl ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null,
+          summary,
+          amazonUrl: buildAmazonUrl(title, author),
+          status: btn.dataset.status,
+          progress: 0,
+          rating: 0
+        };
+        // Avoid duplicates
+        if (!libBooks.find(b => b.title.toLowerCase() === title.toLowerCase())) {
+          libBooks.push(book);
+          LS.set('pom_lib_books', libBooks);
+        }
+        updateLibWidget();
+        renderLibGrid();
+        wrap.classList.add('hidden');
+        $('libSearchInput').value = '';
+      });
+    });
+    wrap.appendChild(item);
+  });
+}
+
+/* ── Open book detail ── */
+function openBookDetail(id) {
+  const b = libBooks.find(bk => bk.id === id);
+  if (!b) return;
+  curLibBook = b;
+
+  $('bookDetailTitle').textContent = b.title;
+  $('bookDetailAuthor').textContent = b.author;
+  $('bookSummaryText').textContent = b.summary || 'No summary available.';
+  $('bookAmazonLink').value = b.amazonUrl || '';
+  $('bookProgressInput').value = b.progress || 0;
+
+  const cov = $('bookCover'); cov.innerHTML = '';
+  if (b.cover) {
+    const img = new Image(); img.src = b.cover; img.alt = b.title;
+    img.style.cssText='width:100%;height:100%;object-fit:cover';
+    img.onerror=()=>{cov.innerHTML='📖';};
+    cov.appendChild(img);
+  } else { cov.innerHTML = '📖'; }
+
+  // Stars
+  document.querySelectorAll('.star').forEach(s => s.classList.toggle('on', +s.dataset.star <= b.rating));
+
+  // Status buttons
+  document.querySelectorAll('.lib-status-btn').forEach(btn => {
+    btn.classList.toggle('lib-status-active', btn.dataset.status === b.status);
+  });
+
+  // Progress input visibility
+  $('progressWrap').classList.toggle('hidden', b.status !== 'reading');
+
+  $('bookDetailModal').classList.add('open');
+}
+
+/* ── Status buttons ── */
+document.querySelectorAll('.lib-status-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!curLibBook) return;
+    if (btn.dataset.status === 'remove') {
+      libBooks = libBooks.filter(b => b.id !== curLibBook.id);
+      LS.set('pom_lib_books', libBooks);
+      curLibBook = null;
+      $('bookDetailModal').classList.remove('open');
+      renderLibGrid();
+      updateLibWidget();
+      return;
+    }
+    curLibBook.status = btn.dataset.status;
+    const idx = libBooks.findIndex(b => b.id === curLibBook.id);
+    if (idx > -1) { libBooks[idx] = curLibBook; LS.set('pom_lib_books', libBooks); }
+    document.querySelectorAll('.lib-status-btn').forEach(b => b.classList.toggle('lib-status-active', b.dataset.status === curLibBook.status));
+    $('progressWrap').classList.toggle('hidden', curLibBook.status !== 'reading');
+    renderLibGrid();
+    updateLibWidget();
+  });
+});
+
+/* ── Progress ── */
+$('bookProgressSave').addEventListener('click', () => {
+  if (!curLibBook) return;
+  const v = Math.max(0, Math.min(100, parseInt($('bookProgressInput').value) || 0));
+  curLibBook.progress = v;
+  const idx = libBooks.findIndex(b => b.id === curLibBook.id);
+  if (idx > -1) { libBooks[idx] = curLibBook; LS.set('pom_lib_books', libBooks); }
+  renderLibGrid();
+  updateLibWidget();
+});
+
+/* ── Stars ── */
+document.querySelectorAll('.star').forEach(star => {
+  star.addEventListener('click', () => {
+    const n = +star.dataset.star;
+    if (!curLibBook) return;
+    curLibBook.rating = n;
+    const idx = libBooks.findIndex(b => b.id === curLibBook.id);
+    if (idx > -1) { libBooks[idx] = curLibBook; LS.set('pom_lib_books', libBooks); }
+    document.querySelectorAll('.star').forEach(s => s.classList.toggle('on', +s.dataset.star <= n));
+  });
+  star.addEventListener('mouseenter', () => { const n=+star.dataset.star; document.querySelectorAll('.star').forEach(s=>s.style.color=+s.dataset.star<=n?'var(--lav)':''); });
+  star.addEventListener('mouseleave', () => document.querySelectorAll('.star').forEach(s=>s.style.color=''));
+});
+
+/* ── Amazon link ── */
+$('bookLinkOpen').addEventListener('click', () => { const u=$('bookAmazonLink').value.trim(); if(u) window.open(u,'_blank'); });
+
+/* ── Library modal open/close ── */
+$('openLibrary').addEventListener('click', () => { renderLibGrid(); $('libraryModal').classList.add('open'); });
+$('libraryClose').addEventListener('click', () => $('libraryModal').classList.remove('open'));
+$('libraryModal').addEventListener('click', e => { if(e.target===$('libraryModal')) $('libraryModal').classList.remove('open'); });
+$('bookDetailClose').addEventListener('click', () => $('bookDetailModal').classList.remove('open'));
+$('bookDetailModal').addEventListener('click', e => { if(e.target===$('bookDetailModal')) $('bookDetailModal').classList.remove('open'); });
+
+updateLibWidget();
+renderLibGrid();
 
 /* ════════════════════════════════════
    MUSIC
@@ -361,67 +585,36 @@ upEl.addEventListener('change',e=>{const was=!plist.length;Array.from(e.target.f
 
 /* ════════════════════════════════════
    MEDICATION TRACKER
-   Storage keys:
-     pom_med_list     — [{id,name,mg,freq,notes}]
-     pom_med_taken    — {YYYY-M-D: true}
-     pom_med_refill   — ISO date string of last pill container refill
 ════════════════════════════════════ */
 const FREQ_LABELS = { once:'Once daily', twice:'Twice daily', three:'3× daily', asneeded:'As needed', weekly:'Weekly' };
-const REFILL_DAYS = 14; // remind every 14 days
-const MED_CYAN = 'oklch(78% 0.14 200)';
+const REFILL_DAYS = 14;
 
 let medList   = LS.get('pom_med_list',  []);
 let medTaken  = LS.get('pom_med_taken', {});
-let medRefill = LS.get('pom_med_refill', null); // ISO date of last refill
+let medRefill = LS.get('pom_med_refill', null);
 
-/* ── helpers ── */
-const medTodayKey = () => {
-  const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-};
+const medTodayKey = () => { const d=new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; };
 const isTakenToday = () => !!medTaken[medTodayKey()];
 
-/* ── refill reminder logic ── */
 function daysSinceRefill() {
   if (!medRefill) return Infinity;
-  const diff = Date.now() - new Date(medRefill).getTime();
-  return Math.floor(diff / (1000*60*60*24));
+  return Math.floor((Date.now() - new Date(medRefill).getTime()) / (1000*60*60*24));
 }
 function shouldShowRefill() {
-  // Show if: never refilled, OR >= REFILL_DAYS since last refill
-  // Snooze: user dismissed within last 7 days → stored in pom_med_snooze
   const snoozedUntil = LS.get('pom_med_snooze_until', null);
   if (snoozedUntil && Date.now() < new Date(snoozedUntil).getTime()) return false;
   return daysSinceRefill() >= REFILL_DAYS;
 }
-function updateRefillBanner() {
-  const banner = $('medRefillBanner');
-  banner.classList.toggle('visible', shouldShowRefill());
-}
-function setRefillNow() {
-  medRefill = new Date().toISOString();
-  LS.set('pom_med_refill', medRefill);
-  // Clear snooze
-  LS.set('pom_med_snooze_until', null);
-  updateRefillBanner();
-  updateRefillDisplay();
-}
-function snoozeRefill() {
-  // Snooze for 7 days
-  const snoozeUntil = new Date(Date.now() + 7*24*60*60*1000).toISOString();
-  LS.set('pom_med_snooze_until', snoozeUntil);
-  updateRefillBanner();
-}
+function updateRefillBanner() { $('medRefillBanner').classList.toggle('visible', shouldShowRefill()); }
+function setRefillNow() { medRefill=new Date().toISOString(); LS.set('pom_med_refill',medRefill); LS.set('pom_med_snooze_until',null); updateRefillBanner(); updateRefillDisplay(); }
+function snoozeRefill() { LS.set('pom_med_snooze_until',new Date(Date.now()+7*24*60*60*1000).toISOString()); updateRefillBanner(); }
 function updateRefillDisplay() {
-  const el = $('medLastRefillDisplay');
-  if (!el) return;
-  if (!medRefill) { el.textContent = 'Never'; return; }
-  const d = new Date(medRefill);
-  el.textContent = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  const days = daysSinceRefill();
-  el.textContent += ` (${days}d ago)`;
+  const el=$('medLastRefillDisplay'); if(!el) return;
+  if(!medRefill){el.textContent='Never';return;}
+  const d=new Date(medRefill);
+  el.textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+` (${daysSinceRefill()}d ago)`;
 }
 
-/* ── week strip (Sun-Sat) ── */
 function buildMedWidget() {
   const el=$('medWeek'); el.innerHTML='';
   const todayDow=new Date().getDay();
@@ -434,88 +627,46 @@ function buildMedWidget() {
     if(isToday) cell.classList.add('med-today');
     const lbl=document.createElement('span'); lbl.className='med-day-label'; lbl.textContent=DAY_SHORT[d].slice(0,2);
     const dot=document.createElement('span'); dot.className='med-dot';
-    if(taken)          { dot.textContent='✓'; dot.classList.add('med-dot-taken'); }
-    else if(isPast)    { dot.textContent='✗'; dot.classList.add('med-dot-missed'); }
-    else               { dot.textContent='·'; dot.classList.add('med-dot-pending'); }
+    if(taken)       { dot.textContent='✓'; dot.classList.add('med-dot-taken'); }
+    else if(isPast) { dot.textContent='✗'; dot.classList.add('med-dot-missed'); }
+    else            { dot.textContent='·'; dot.classList.add('med-dot-pending'); }
     cell.appendChild(lbl); cell.appendChild(dot); el.appendChild(cell);
   }
-  // Button text
   $('medTakenBtn').textContent = isTakenToday() ? '✓ Taken today' : 'Taken today! 💊';
   $('medTakenBtn').style.opacity = isTakenToday() ? '0.55' : '1';
 }
 
-/* ── modal med list ── */
 function renderMedList() {
   const el=$('medList'); el.innerHTML='';
-  if (!medList.length) {
-    el.innerHTML='<p style="font-size:.54rem;color:var(--txt-d);text-align:center;padding:14px 0;font-family:\'DM Mono\',monospace">No medications added yet.</p>';
-    return;
-  }
+  if(!medList.length){ el.innerHTML='<p style="font-size:.54rem;color:var(--txt-d);text-align:center;padding:14px 0;font-family:\'DM Mono\',monospace">No medications added yet.</p>'; return; }
   medList.forEach((med,i)=>{
     const item=document.createElement('div'); item.className='med-item';
-    const freqLabel=FREQ_LABELS[med.freq]||med.freq;
-    item.innerHTML=`
-      <span class="med-item-icon">💊</span>
-      <div class="med-item-info">
-        <div class="med-item-name">${med.name}</div>
-        <div class="med-item-detail">${med.mg} · ${freqLabel}</div>
-        ${med.notes?`<div class="med-item-notes">${med.notes}</div>`:''}
-      </div>
-      <button class="med-item-delete" data-idx="${i}" title="Remove">✕</button>
-    `;
+    item.innerHTML=`<span class="med-item-icon">💊</span><div class="med-item-info"><div class="med-item-name">${med.name}</div><div class="med-item-detail">${med.mg} · ${FREQ_LABELS[med.freq]||med.freq}</div>${med.notes?`<div class="med-item-notes">${med.notes}</div>`:''}</div><button class="med-item-delete" data-idx="${i}" title="Remove">✕</button>`;
     el.appendChild(item);
   });
   el.querySelectorAll('.med-item-delete').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      medList.splice(+btn.dataset.idx,1);
-      LS.set('pom_med_list',medList);
-      renderMedList();
-    });
+    btn.addEventListener('click',()=>{ medList.splice(+btn.dataset.idx,1); LS.set('pom_med_list',medList); renderMedList(); });
   });
 }
 
-/* ── mark taken today ── */
-$('medTakenBtn').addEventListener('click', e=>{
-  e.stopPropagation();
-  if (isTakenToday()) return; // already logged
-  medTaken[medTodayKey()] = true;
-  LS.set('pom_med_taken', medTaken);
-  buildMedWidget();
-  // flash
-  const cells=$('medWeek').querySelectorAll('.med-cell');
-  const todayDow=new Date().getDay();
+$('medTakenBtn').addEventListener('click',e=>{
+  e.stopPropagation(); if(isTakenToday()) return;
+  medTaken[medTodayKey()]=true; LS.set('pom_med_taken',medTaken); buildMedWidget();
+  const cells=$('medWeek').querySelectorAll('.med-cell'), todayDow=new Date().getDay();
   if(cells[todayDow]){ cells[todayDow].style.background='oklch(78% 0.14 200 / 0.28)'; setTimeout(()=>cells[todayDow].style.background='',900); }
 });
-
-/* ── card opens modal ── */
-$('medCard').addEventListener('click', ()=>{
-  renderMedList();
-  updateRefillDisplay();
-  $('medModal').classList.add('open');
-});
+$('medCard').addEventListener('click',()=>{ renderMedList(); updateRefillDisplay(); $('medModal').classList.add('open'); });
 $('medModalClose').addEventListener('click',()=>$('medModal').classList.remove('open'));
 $('medModal').addEventListener('click',e=>{ if(e.target===$('medModal')) $('medModal').classList.remove('open'); });
-
-/* ── add medication ── */
 $('medAddBtn').addEventListener('click',()=>{
-  const name=$('medNameInput').value.trim();
-  const mg=$('medMgInput').value.trim();
-  if(!name) return;
-  medList.push({ id:Date.now(), name, mg:mg||'—', freq:$('medFreqSelect').value, notes:$('medNotesInput').value.trim() });
-  LS.set('pom_med_list',medList);
-  $('medNameInput').value=''; $('medMgInput').value=''; $('medNotesInput').value='';
-  $('medFreqSelect').value='once';
+  const name=$('medNameInput').value.trim(); if(!name) return;
+  medList.push({id:Date.now(),name,mg:$('medMgInput').value.trim()||'—',freq:$('medFreqSelect').value,notes:$('medNotesInput').value.trim()});
+  LS.set('pom_med_list',medList); $('medNameInput').value=''; $('medMgInput').value=''; $('medNotesInput').value=''; $('medFreqSelect').value='once';
   renderMedList();
 });
 $('medNameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('medAddBtn').click(); });
-
-/* ── refill actions ── */
-$('medRefillResetBtn').addEventListener('click',()=>{ setRefillNow(); });
+$('medRefillResetBtn').addEventListener('click',setRefillNow);
 $('medRefillSnooze').addEventListener('click',e=>{ e.stopPropagation(); snoozeRefill(); });
-
-/* ── init ── */
 buildMedWidget();
 updateRefillBanner();
-
-// Re-check refill reminder every hour in case dashboard stays open
-setInterval(()=>{ updateRefillBanner(); }, 60*60*1000);
+setInterval(updateRefillBanner, 60*60*1000);

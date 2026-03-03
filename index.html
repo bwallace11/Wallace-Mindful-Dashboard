@@ -38,15 +38,17 @@
     <!-- ROW 3 C1-2 : Calendar -->
     <section class="card card-calendar" aria-label="Calendar">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
-      <div class="card-content" style="padding:11px 14px">
-        <div class="flex items-center justify-between mb-0.5">
-          <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Calendar</span>
+      <div class="card-content cal-card-content">
+        <div class="flex items-center justify-between mb-1 flex-shrink-0">
+          <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)]">Calendar</span>
           <span id="calMonthYear" class="cal-month-year uppercase tracking-widest text-[var(--lav)]"></span>
         </div>
-        <div class="mb-1">
-          <time class="cal-date-display"><span class="cal-day" style="font-size:.46rem;letter-spacing:.02em;color:var(--txt-d);font-family:'DM Mono',monospace"><span class="month"></span> <span class="dayOfMonth"></span>, <span class="year"></span> — <span class="dayOfWeek"></span></span></time>
+        <div class="mb-1 flex-shrink-0">
+          <time class="cal-date-display"><span class="cal-day-str font-mono text-[var(--txt-d)]"><span class="month"></span> <span class="dayOfMonth"></span>, <span class="year"></span> — <span class="dayOfWeek"></span></span></time>
         </div>
-        <div class="cal-grid grid gap-[1.5px]" style="grid-template-columns:repeat(7,1fr)" id="calGrid"></div>
+        <div class="cal-grid-wrap flex-1 min-h-0">
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
       </div>
     </section>
 
@@ -54,22 +56,17 @@
     <section class="card card-library cursor-pointer" aria-label="Library" id="openLibrary">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
       <div class="card-content justify-between">
-        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Currently Reading</span>
+        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">My Library</span>
         <div class="flex items-center gap-2.5 flex-1 my-1.5">
           <div class="lib-icon text-3xl flex-shrink-0" style="filter:drop-shadow(0 0 8px var(--lav))">📚</div>
           <div class="flex-1 min-w-0">
-            <p class="book-title font-['Melodrama',serif] text-[var(--txt)] leading-tight mb-1.5">The Night Circus</p>
-            <div class="h-[3px] bg-white/10 rounded-full"><div class="progress-fill h-full w-[60%] rounded-full"></div></div>
-            <span class="progress-label uppercase tracking-wider font-mono text-[var(--txt-d)] mt-1 block">60% complete</span>
+            <p class="book-title font-['Melodrama',serif] text-[var(--txt)] leading-tight mb-1" id="libCurrentTitle">No book selected</p>
+            <p class="music-artist font-mono text-[var(--txt-d)] truncate mb-1" id="libCurrentAuthor">—</p>
+            <div class="h-[3px] bg-white/10 rounded-full"><div class="progress-fill h-full rounded-full" id="libProgressFill" style="width:0%"></div></div>
+            <span class="progress-label uppercase tracking-wider font-mono text-[var(--txt-d)] mt-1 block" id="libProgressLabel">0% complete</span>
           </div>
         </div>
-        <div class="flex gap-1">
-          <div class="spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200" style="background:oklch(62% 0.18 25)"></div>
-          <div class="spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200" style="background:oklch(72% 0.14 155)"></div>
-          <div class="spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200" style="background:oklch(65% 0.16 260)"></div>
-          <div class="spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200" style="background:oklch(75% 0.14 90)"></div>
-          <div class="spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200" style="background:oklch(65% 0.18 310)"></div>
-        </div>
+        <div class="flex gap-1" id="libSpines"></div>
       </div>
     </section>
 
@@ -84,8 +81,9 @@
             <button class="anniv-action-btn anniv-action-danger uppercase tracking-widest font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" style="border-color:oklch(65% 0.18 25 / 0.35);color:oklch(80% 0.12 20);background:oklch(65% 0.18 25 / 0.07);border-width:1px" id="annivRemoveBtn">✕ Remove</button>
           </div>
         </div>
-        <div class="anniv-slide-wrap flex-1 rounded-xl overflow-hidden bg-white/[0.05] border border-white/[0.15] flex items-center justify-center min-h-0 max-h-full relative" id="annivSlideWrap">
-          <div class="flex flex-col items-center justify-center gap-1.5 p-3 text-center" id="annivPlaceholder">
+        <!-- Fixed-height photo area so it never shifts layout -->
+        <div class="anniv-photo-area relative flex-shrink-0" id="annivSlideWrap">
+          <div class="flex flex-col items-center justify-center gap-1.5 p-3 text-center absolute inset-0" id="annivPlaceholder">
             <span class="text-4xl">💕</span>
             <span class="anniv-hint font-mono text-[var(--txt-d)] leading-relaxed">Click + Add to upload photos</span>
           </div>
@@ -138,32 +136,34 @@
     <!-- ROW 1 C3-4 : Medication -->
     <section class="card card-med cursor-pointer" aria-label="Medications" id="medCard">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
-      <div class="card-content gap-2">
-        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Medications 💊</span>
+      <div class="card-content med-card-content">
+        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block flex-shrink-0">Medications 💊</span>
         <div class="med-refill-banner hidden items-center gap-1.5 rounded-lg px-2.5 py-1.5 flex-shrink-0" style="background:oklch(78% 0.18 80 / 0.15);border:1px solid oklch(78% 0.18 80 / 0.50);color:oklch(78% 0.18 80)" id="medRefillBanner">
           <span>⚠️ Time to refill your pill container!</span>
           <button class="med-refill-snooze bg-transparent border-none ml-auto opacity-70 cursor-pointer transition-opacity" style="color:oklch(78% 0.18 80)" id="medRefillSnooze" title="Snooze 1 week">✕</button>
         </div>
-        <div class="flex gap-1 flex-1 items-stretch" id="medWeek"></div>
-        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all self-stretch" style="background:oklch(78% 0.14 200 / 0.12);border:1px solid oklch(78% 0.14 200 / 0.40);color:oklch(78% 0.14 200)" id="medTakenBtn">Taken today! 💊</button>
+        <div class="med-week-wrap flex-1 min-h-0 flex items-stretch" id="medWeekWrap">
+          <div class="flex gap-1 w-full" id="medWeek"></div>
+        </div>
+        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all flex-shrink-0" style="background:oklch(78% 0.14 200 / 0.12);border:1px solid oklch(78% 0.14 200 / 0.40);color:oklch(78% 0.14 200)" id="medTakenBtn">Taken today! 💊</button>
       </div>
     </section>
 
     <!-- ROW 1 C1-2 : Music -->
     <section class="card card-music" aria-label="Music Player">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
-      <div class="card-content gap-1.5">
-        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Now Playing</span>
-        <div class="flex items-center gap-2.5 flex-1">
+      <div class="card-content music-card-content">
+        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block flex-shrink-0">Now Playing</span>
+        <div class="flex items-center gap-2.5 flex-1 min-h-0">
           <div class="music-art w-11 h-11 rounded-lg bg-white/[0.08] border border-white/[0.16] flex items-center justify-center text-xl flex-shrink-0 overflow-hidden" id="musicArt">♪</div>
           <div class="flex-1 min-w-0">
             <p class="music-track font-['Melodrama',serif] text-[var(--txt)] truncate mb-0.5" id="musicTrack">No track loaded</p>
             <p class="music-artist font-mono text-[var(--txt-d)] tracking-widest truncate mb-1" id="musicArtist">—</p>
-            <div class="h-[3px] bg-white/10 rounded-full cursor-pointer" id="musicProgressBar"><div class="music-bar-fill h-full w-0 rounded-full transition-[width] duration-[250ms] linear" id="musicFill"></div></div>
+            <div class="h-[3px] bg-white/10 rounded-full cursor-pointer" id="musicProgressBar"><div class="music-bar-fill h-full w-0 rounded-full" id="musicFill"></div></div>
             <span class="music-time font-mono text-[var(--txt-d)] block mt-0.5" id="musicTimeDisplay">0:00 / 0:00</span>
           </div>
         </div>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1 flex-shrink-0">
           <button class="music-btn bg-white/[0.08] border border-white/[0.16] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicPrev">⏮</button>
           <button class="music-btn music-play bg-[oklch(80%_0.13_300/0.15)] border border-[oklch(80%_0.13_300/0.45)] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicPlay">▶</button>
           <button class="music-btn bg-white/[0.08] border border-white/[0.16] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicNext">⏭</button>
@@ -215,43 +215,65 @@
 
   <!-- Library -->
   <div class="modal-overlay fixed inset-0 flex justify-center items-center z-[100] p-5" id="libraryModal">
-    <div class="modal-glass w-[min(520px,100%)] max-h-[84vh] overflow-y-auto rounded-3xl p-7 relative">
+    <div class="modal-glass w-[min(600px,100%)] max-h-[90vh] overflow-y-auto rounded-3xl p-7 relative">
       <button class="modal-x absolute top-3.5 right-4 z-[3] bg-white/10 border border-white/[0.22] rounded-full w-[27px] h-[27px] text-[var(--txt-d)] cursor-pointer flex items-center justify-center transition-all" id="libraryClose">✕</button>
-      <h2 class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-3.5 pr-7">My Bookshelf</h2>
-      <div class="grid gap-2.5 mt-1" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="night-circus">The Night Circus</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="atomic-habits">Atomic Habits</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="dune">Dune</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="hobbit">The Hobbit</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="silent-patient">The Silent Patient</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="midnight-library">The Midnight Library</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="gone-girl">Gone Girl</div>
-        <div class="book-card bg-white/[0.07] border border-white/[0.18] p-2.5 rounded-xl font-mono text-[var(--txt)] cursor-pointer leading-snug transition-all" data-book="martian">The Martian</div>
+      <h2 class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-1 pr-7">My Bookshelf</h2>
+
+      <!-- Search + Add -->
+      <div class="flex gap-2 mb-4 mt-2">
+        <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0" id="libSearchInput" type="text" placeholder="Search for a book to add…"/>
+        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="libSearchBtn">Search 🔍</button>
       </div>
+      <!-- Search results -->
+      <div id="libSearchResults" class="hidden flex flex-col gap-2 mb-4 max-h-[220px] overflow-y-auto"></div>
+
+      <!-- Tabs: Reading / Read -->
+      <div class="flex gap-2 mb-3">
+        <button class="lib-tab lib-tab-active font-mono uppercase tracking-widest rounded-[9px] px-3 py-1.5 cursor-pointer transition-all" data-tab="reading" id="tabReading">📖 Reading</button>
+        <button class="lib-tab font-mono uppercase tracking-widest rounded-[9px] px-3 py-1.5 cursor-pointer transition-all" data-tab="read" id="tabRead">✅ Read</button>
+      </div>
+
+      <div id="libGrid" class="grid gap-3" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))"></div>
+      <p class="lib-empty-msg hidden font-mono text-[var(--txt-d)] text-center py-6" id="libEmptyMsg">No books here yet. Search above to add one!</p>
     </div>
   </div>
 
   <!-- Book Detail -->
   <div class="modal-overlay fixed inset-0 flex justify-center items-center p-5" id="bookDetailModal" style="z-index:201">
-    <div class="modal-glass w-[min(520px,100%)] max-h-[84vh] overflow-y-auto rounded-3xl p-7 relative">
+    <div class="modal-glass w-[min(520px,100%)] max-h-[90vh] overflow-y-auto rounded-3xl p-7 relative">
       <button class="modal-x absolute top-3.5 right-4 z-[3] bg-white/10 border border-white/[0.22] rounded-full w-[27px] h-[27px] text-[var(--txt-d)] cursor-pointer flex items-center justify-center transition-all" id="bookDetailClose">✕</button>
       <div class="flex gap-3.5 items-start mb-3.5">
         <div class="bk-cover w-[76px] h-[112px] rounded-md flex-shrink-0 bg-white/[0.08] border border-white/[0.18] flex items-center justify-center text-3xl overflow-hidden" id="bookCover">📖</div>
         <div class="flex-1">
           <div class="bk-title font-['Melodrama',serif] text-[var(--txt)] leading-tight mb-1" id="bookDetailTitle"></div>
-          <div class="bk-author font-mono text-[var(--txt-d)] tracking-widest mb-2.5" id="bookDetailAuthor"></div>
-          <div class="flex gap-1 mb-2.5">
+          <div class="bk-author font-mono text-[var(--txt-d)] tracking-widest mb-2" id="bookDetailAuthor"></div>
+          <!-- Status selector -->
+          <div class="flex gap-1.5 mb-2">
+            <button class="lib-status-btn font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all" data-status="reading" id="statusReading">📖 Reading</button>
+            <button class="lib-status-btn font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all" data-status="read" id="statusRead">✅ Read</button>
+            <button class="lib-status-btn font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all" data-status="remove" id="statusRemove">🗑 Remove</button>
+          </div>
+          <!-- Progress (only shown for reading) -->
+          <div id="progressWrap" class="hidden mb-2">
+            <label class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1">Progress %</label>
+            <div class="flex gap-1.5 items-center">
+              <input class="mi bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)]" id="bookProgressInput" type="number" min="0" max="100" placeholder="0–100"/>
+              <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer" id="bookProgressSave">Save</button>
+            </div>
+          </div>
+          <!-- Star rating -->
+          <div class="flex gap-1">
             <span class="star text-base text-white/20 cursor-pointer transition-all" data-star="1" tabindex="0">★</span>
             <span class="star text-base text-white/20 cursor-pointer transition-all" data-star="2" tabindex="0">★</span>
             <span class="star text-base text-white/20 cursor-pointer transition-all" data-star="3" tabindex="0">★</span>
             <span class="star text-base text-white/20 cursor-pointer transition-all" data-star="4" tabindex="0">★</span>
             <span class="star text-base text-white/20 cursor-pointer transition-all" data-star="5" tabindex="0">★</span>
           </div>
-          <div class="flex gap-1.5">
-            <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0 transition-colors" id="bookLinkInput" type="url" placeholder="Goodreads / Amazon link…"/>
-            <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="bookLinkOpen">Open ↗</button>
-          </div>
         </div>
+      </div>
+      <div class="flex gap-1.5 mb-3.5">
+        <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0" id="bookAmazonLink" type="url" placeholder="Amazon link (auto-filled or paste)…" readonly/>
+        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="bookLinkOpen">Buy ↗</button>
       </div>
       <div class="bk-summary font-mono text-[var(--txt-d)] leading-relaxed border-t border-white/10 pt-3">
         <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1.5">Summary</span>
