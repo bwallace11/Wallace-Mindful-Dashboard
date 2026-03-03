@@ -185,8 +185,8 @@ main {
    MUSIC — fills full card height
 ════════════════════════════════════ */
 .music-card-content {
-  padding: 14px 16px;
-  gap: 10px;
+  padding: 18px 20px;
+  gap: 0;
   justify-content: space-between;
 }
 
@@ -248,7 +248,7 @@ main {
 .lib-card-title {
   font-size: .60rem; font-family: 'Melodrama', serif;
   color: var(--txt); padding: 6px 8px 2px;
-  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .lib-card-author { font-size: .42rem; font-family: 'DM Mono', monospace; color: var(--txt-d); padding: 0 8px 4px; }
 .lib-card-prog { height: 3px; background: oklch(100% 0 0 / 0.10); margin: 0 8px 6px; border-radius: 3px; }
@@ -564,6 +564,44 @@ body, .label, .cal-day-name, .cal-day, .anniv-hint,
 .med-dot-missed { color: oklch(65% 0.18 5); }
 .gym-dot-yes { color: oklch(88% 0.14 155); }
 .gym-dot-no  { color: oklch(65% 0.18 5); }
+
+/* Light theme — darken all status/accent colors for readability */
+[data-theme="light"] .gym-status-yes,
+[data-theme="light"] .gym-dot-yes       { color: oklch(38% 0.18 155); }
+[data-theme="light"] .gym-status-no,
+[data-theme="light"] .gym-dot-no,
+[data-theme="light"] .med-dot-missed,
+[data-theme="light"] .rdel:hover        { color: oklch(38% 0.22 15); }
+[data-theme="light"] .med-dot-taken     { color: oklch(35% 0.18 220); }
+[data-theme="light"] .gym-status-rest,
+[data-theme="light"] .gym-status-pending { color: oklch(32% 0.10 280); }
+[data-theme="light"] .med-item-delete:hover { color: oklch(38% 0.22 15); background: oklch(38% 0.22 15 / 0.10); }
+[data-theme="light"] .gym-btn {
+  background: oklch(38% 0.18 155 / 0.14);
+  border-color: oklch(38% 0.18 155 / 0.50);
+  color: oklch(28% 0.18 155);
+}
+[data-theme="light"] .med-btn {
+  background: oklch(35% 0.18 220 / 0.14);
+  border-color: oklch(35% 0.18 220 / 0.50);
+  color: oklch(28% 0.18 220);
+}
+[data-theme="light"] .med-refill-banner {
+  background: oklch(42% 0.18 80 / 0.15);
+  border-color: oklch(42% 0.18 80 / 0.55);
+  color: oklch(32% 0.18 80);
+}
+[data-theme="light"] #medLastRefillDisplay { color: oklch(32% 0.18 80); }
+[data-theme="light"] .med-reset-btn {
+  background: oklch(42% 0.18 80 / 0.14);
+  border-color: oklch(42% 0.18 80 / 0.50);
+  color: oklch(28% 0.18 80);
+}
+[data-theme="light"] .anniv-action-danger {
+  color: oklch(38% 0.20 20);
+  border-color: oklch(38% 0.20 20 / 0.45);
+  background: oklch(38% 0.20 20 / 0.10);
+}
 .gym-cell.gym-rest { opacity: .55; }
 
 /* Medication item */
