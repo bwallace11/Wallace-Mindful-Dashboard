@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════
+//* ═══════════════════════════════════════════
    PEACE OF MIND — style.css
 ═══════════════════════════════════════════ */
 
@@ -114,21 +114,40 @@ main {
 ════════════════════════════════════ */
 .cal-card-content {
   padding: 10px 12px;
-  gap: 0;
+  gap: 4px;
+  overflow: hidden;
 }
 .cal-grid-wrap {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 .cal-grid {
+  flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1.5px;
-  flex: 1;
-  align-content: start;
+  grid-auto-rows: 1fr;
+  gap: 2px;
 }
-.cal-day-str { font-size: .42rem; letter-spacing: .04em; color: var(--txt-d); font-family: 'DM Mono', monospace; }
+.cal-day-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cal-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: clamp(.45rem, 1.1vw, .7rem) !important;
+}
+.cal-day-str { font-size: .44rem; letter-spacing: .03em; color: var(--txt-d); font-family: 'DM Mono', monospace; }
+.cal-day-name { font-size: clamp(.34rem, 0.8vw, .52rem) !important; letter-spacing: .04em; }
 
 /* ════════════════════════════════════
    MEDICATION — fills full card height
@@ -166,8 +185,9 @@ main {
    MUSIC — fills full card height
 ════════════════════════════════════ */
 .music-card-content {
-  padding: 12px 14px;
-  gap: 8px;
+  padding: 14px 16px;
+  gap: 10px;
+  justify-content: space-between;
 }
 
 /* ════════════════════════════════════
@@ -228,7 +248,7 @@ main {
 .lib-card-title {
   font-size: .60rem; font-family: 'Melodrama', serif;
   color: var(--txt); padding: 6px 8px 2px;
-  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .lib-card-author { font-size: .42rem; font-family: 'DM Mono', monospace; color: var(--txt-d); padding: 0 8px 4px; }
 .lib-card-prog { height: 3px; background: oklch(100% 0 0 / 0.10); margin: 0 8px 6px; border-radius: 3px; }
