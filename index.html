@@ -76,7 +76,7 @@
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
       <div class="card-content p-3 overflow-hidden flex flex-col gap-1.5 h-full min-h-0">
         <div class="flex items-center justify-between flex-shrink-0">
-          <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)]">Anniversary 💕</span>
+          <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)]">Anniversary</span>
           <div class="flex gap-1">
             <button class="anniv-action-btn uppercase tracking-widest font-mono text-[var(--txt)] bg-white/[0.08] border border-white/[0.22] rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" id="annivAddBtn">＋ Add</button>
             <button class="anniv-action-btn anniv-action-danger uppercase tracking-widest font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" style="border-color:oklch(65% 0.18 25 / 0.35);color:oklch(80% 0.12 20);background:oklch(65% 0.18 25 / 0.07);border-width:1px" id="annivRemoveBtn">✕ Remove</button>
@@ -85,7 +85,7 @@
         <!-- Fixed-height photo area so it never shifts layout -->
         <div class="anniv-photo-area relative flex-shrink-0" id="annivSlideWrap">
           <div class="flex flex-col items-center justify-center gap-1.5 p-3 text-center absolute inset-0" id="annivPlaceholder">
-            <span class="text-4xl">💕</span>
+            <span class="text-4xl"></span>
             <span class="anniv-hint font-mono text-[var(--txt-d)] leading-relaxed">Click + Add to upload photos</span>
           </div>
           <img class="anniv-img hidden" id="annivImg" alt="Anniversary photo"/>
@@ -97,7 +97,7 @@
         <div class="flex-shrink-0 text-center">
           <span class="anniv-years font-['Melodrama',serif] text-[var(--txt)] leading-none block" id="annivYears">—</span>
           <span class="anniv-unit uppercase tracking-wider font-mono text-[var(--lav)] block mt-0.5">years together</span>
-          <span class="anniv-date font-mono text-[var(--txt-d)] block mt-0.5">April 20, 2022 💕</span>
+          <span class="anniv-date font-mono text-[var(--txt-d)] block mt-0.5">April 20, 2022 </span>
         </div>
       </div>
       <input type="file" id="annivUpload" accept="image/*" multiple class="hidden">
@@ -122,7 +122,7 @@
           <div class="flex flex-col gap-2 flex-1 min-w-0">
             <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Gym Log</span>
             <div class="flex gap-1 flex-1 items-stretch" id="gymWeek"></div>
-            <button class="gym-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all self-stretch" style="background:oklch(88% 0.14 155 / 0.12);border:1px solid oklch(88% 0.14 155 / 0.40);color:oklch(88% 0.14 155)" id="gymLogBtn">I went today! 💪</button>
+            <button class="gym-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all self-stretch" style="background:oklch(88% 0.14 155 / 0.12);border:1px solid oklch(88% 0.14 155 / 0.40);color:oklch(88% 0.14 155)" id="gymLogBtn">I went today! </button>
           </div>
           <div class="gym-grad-divider w-px bg-white/10 mx-4 flex-shrink-0 rounded-sm"></div>
           <div class="grad-section flex flex-col items-center justify-center gap-0.5 flex-shrink-0 w-[90px] text-center">
@@ -138,15 +138,15 @@
     <section class="card card-med cursor-pointer" aria-label="Medications" id="medCard">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
       <div class="card-content med-card-content">
-        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block flex-shrink-0">Medications 💊</span>
+        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block flex-shrink-0">Medications</span>
         <div class="med-refill-banner hidden items-center gap-1.5 rounded-lg px-2.5 py-1.5 flex-shrink-0" style="background:oklch(78% 0.18 80 / 0.15);border:1px solid oklch(78% 0.18 80 / 0.50);color:oklch(78% 0.18 80)" id="medRefillBanner">
-          <span>⚠️ Time to refill your pill container!</span>
+          <span>Time to refill your pill container!</span>
           <button class="med-refill-snooze bg-transparent border-none ml-auto opacity-70 cursor-pointer transition-opacity" style="color:oklch(78% 0.18 80)" id="medRefillSnooze" title="Snooze 1 week">✕</button>
         </div>
         <div class="med-week-wrap flex-1 min-h-0 flex items-stretch" id="medWeekWrap">
           <div class="flex gap-1 w-full" id="medWeek"></div>
         </div>
-        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all flex-shrink-0" style="background:oklch(78% 0.14 200 / 0.12);border:1px solid oklch(78% 0.14 200 / 0.40);color:oklch(78% 0.14 200)" id="medTakenBtn">Taken today! 💊</button>
+        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all flex-shrink-0" style="background:oklch(78% 0.14 200 / 0.12);border:1px solid oklch(78% 0.14 200 / 0.40);color:oklch(78% 0.14 200)" id="medTakenBtn">Taken today!</button>
       </div>
     </section>
 
@@ -179,9 +179,9 @@
     <div class="card card-fox cursor-pointer" id="foxCard" aria-label="Daily Fox">
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
       <div class="card-content gap-1.5">
-        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Daily Fox — click for a new one! 🦊</span>
+        <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Daily Fox — click for a new one!</span>
         <div class="flex-1 w-full flex items-center justify-center overflow-hidden rounded-xl min-h-0" id="foxImgWrap">
-          <span class="text-5xl">🦊</span>
+          <span class="text-5xl"></span>
         </div>
       </div>
     </div>
@@ -302,7 +302,7 @@
   <div class="modal-overlay fixed inset-0 flex justify-center items-center p-5" id="waterModal" style="z-index:150">
     <div class="modal-glass w-[min(440px,100%)] max-h-[84vh] overflow-y-auto rounded-3xl p-7 relative">
       <button class="modal-x absolute top-3.5 right-4 z-[3] bg-white/10 border border-white/[0.22] rounded-full w-[27px] h-[27px] text-[var(--txt-d)] cursor-pointer flex items-center justify-center transition-all" id="waterModalClose">✕</button>
-      <div class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-3.5 pr-7">💧 Hydration Log</div>
+      <div class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-3.5 pr-7">Hydration Log</div>
       <div class="flex justify-between items-center mb-3">
         <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)]" style="margin-bottom:0">Today's intake</span>
         <span class="water-big font-['Melodrama',serif] text-[var(--txt)]" id="wToday">0</span>
@@ -326,7 +326,7 @@
   <div class="modal-overlay fixed inset-0 flex justify-center items-center p-5" id="gymModal" style="z-index:150">
     <div class="modal-glass w-[min(440px,100%)] max-h-[84vh] overflow-y-auto rounded-3xl p-7 relative">
       <button class="modal-x absolute top-3.5 right-4 z-[3] bg-white/10 border border-white/[0.22] rounded-full w-[27px] h-[27px] text-[var(--txt-d)] cursor-pointer flex items-center justify-center transition-all" id="gymModalClose">✕</button>
-      <div class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-3.5 pr-7">🏋️ Gym Log</div>
+      <div class="modal-title font-['Melodrama',serif] text-[var(--txt)] mb-3.5 pr-7">Gym Log</div>
       <div class="flex flex-col gap-1.5 mb-1.5" id="gymWeekFull"></div>
       <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mt-3.5 mb-1.5">Past Weeks</span>
       <div class="flex flex-col gap-1 mt-1 max-h-[180px] overflow-y-auto" id="gymHistory"></div>
@@ -338,7 +338,7 @@
     <div class="modal-glass w-[min(440px,100%)] max-h-[84vh] overflow-y-auto rounded-3xl p-7 relative">
       <button class="modal-x absolute top-3.5 right-4 z-[3] bg-white/10 border border-white/[0.22] rounded-full w-[27px] h-[27px] text-[var(--txt-d)] cursor-pointer flex items-center justify-center transition-all" id="medModalClose">✕</button>
       <div class="flex items-center justify-between flex-wrap gap-2 mb-3.5">
-        <div class="modal-title font-['Melodrama',serif] text-[var(--txt)]" style="margin-bottom:0">💊 Medications</div>
+        <div class="modal-title font-['Melodrama',serif] text-[var(--txt)]" style="margin-bottom:0">Medications</div>
         <div class="flex flex-col items-end gap-1">
           <div class="med-refill-info font-mono text-[var(--txt-d)]">Last refill: <span style="color:oklch(78% 0.18 80)" id="medLastRefillDisplay">—</span></div>
           <button class="med-reset-btn font-mono rounded-[7px] px-2.5 py-1 cursor-pointer transition-colors whitespace-nowrap" style="background:oklch(78% 0.18 80 / 0.12);border:1px solid oklch(78% 0.18 80 / 0.40);color:oklch(78% 0.18 80)" id="medRefillResetBtn">✓ Just refilled</button>

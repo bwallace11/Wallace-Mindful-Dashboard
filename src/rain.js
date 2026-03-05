@@ -1,25 +1,22 @@
 // Front-end & UX design words — more of them, more visible
 const words = [
   // Core tech
-  'flexbox','grid','CSS','HTML','JS','DOM','API','fetch','async','await',
-  'props','state','hook','render','event','class','module','import','export',
-  'const','let','var','function','arrow','promise','callback','closure',
-  'Tailwind','React','Vue','Vite','Node','NPM','webpack','babel','TypeScript',
-  'ARIA','a11y','SEO','PWA','SSR','CSR','SPA','REST','JSON','WebGL',
-  // UX & Design
-  'UX','UI','Figma','wireframe','prototype','persona','journey','heuristic',
-  'affordance','gestalt','hierarchy','contrast','alignment','proximity','balance',
-  'kerning','leading','tracking','typeface','serif','sans-serif','weight',
-  'usability','accessibility','inclusive','empathy','research','testing',
-  'A/B test','card sort','sitemap','flow','user story','feedback','iterate',
-  'color theory','whitespace','grid','rhythm','motion','micro-interaction',
-  'responsive','mobile-first','breakpoint','viewport','pixel','rem','em','vw',
-  'z-index','transform','transition','animation','keyframe','bezier','easing',
-  'component','design system','token','variant','slot','portal','context',
-  'Storybook','Figma','Zeplin','InVision','Sketch','Framer','Lottie','SVG',
-  'shadow','depth','layer','blur','opacity','gradient','tint','shade','hue',
-  'interaction','delight','feedback loop','affordance','signifier','mapping',
-  'mental model','information architecture','content strategy','readability'
+  'flexbox','grid','CSS','HTML','JavaScript','DOM','API','fetch','async','accessibility',
+'alignment','state','render','event','class','module','import','export',
+'const','let','container','function','arrow','breakpoints','callback','closure',
+'ARIA','a11y','SEO','PWA','SSR','CSR','SPA','REST','JSON',
+'UX','UI','wireframe','prototype','persona','journey','baseline',
+'affordance','gestalt','hierarchy','contrast','alignment','proximity','balance',
+'kerning','leading','tracking','typeface','serif','sans-serif','weight',
+'usability','accessibility','inclusive','empathy','research','testing',
+'A/B test','card sort','sitemap','flow','user story','feedback','iterate',
+'color theory','whitespace','grid','rhythm','motion','micro-interaction',
+'responsive','mobile-first','breakpoint','viewport','pixel','rem','em','vw',
+'z-index','transform','transition','animation','keyframe','bezier','easing',
+'component','design system','token','variant','slot','context',
+'shadow','depth','layer','blur','opacity','gradient','tint','shade','hue',
+'interaction','delight','feedback loop','signifier','mapping',
+'mental model','information architecture','content strategy','readability'
 ];
 
 let drops = [];
