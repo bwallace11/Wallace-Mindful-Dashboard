@@ -153,11 +153,9 @@ main {
   -webkit-backdrop-filter: blur(14px) saturate(160%) brightness(1.10);
   backdrop-filter: blur(14px) saturate(160%) brightness(1.10);
 }
-/* Only apply SVG filter where supported (not Firefox — it causes blank cards) */
-@supports (filter: url(#x)) and (not (-moz-appearance: none)) {
-  .glass-filter { filter: url(#glass-distortion) saturate(130%) brightness(1.08); }
-  .modal-glass  { filter: url(#glass-distortion); }
-}
+/* SVG displacement filter removed — combining filter + backdrop-filter
+   causes blank/broken cards in Chrome & Safari. The backdrop-filter
+   glass effect alone works reliably across all browsers. */
 .glass-overlay {
   position: absolute; inset: 0; border-radius: inherit; z-index: 2;
   background: var(--glass-bg);

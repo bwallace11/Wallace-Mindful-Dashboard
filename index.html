@@ -79,7 +79,7 @@
           <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)]">Anniversary</span>
           <div class="flex gap-1">
             <button class="anniv-action-btn uppercase tracking-widest font-mono text-[var(--txt)] bg-white/[0.08] border border-white/[0.22] rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" id="annivAddBtn">＋ Add</button>
-            <button class="anniv-action-btn anniv-action-danger uppercase tracking-widest font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" style="border-color:oklch(65% 0.18 25 / 0.35);color:oklch(80% 0.12 20);background:oklch(65% 0.18 25 / 0.07);border-width:1px" id="annivRemoveBtn">✕ Remove</button>
+            <button class="anniv-action-btn anniv-action-danger uppercase tracking-widest font-mono rounded-[7px] px-2 py-0.5 cursor-pointer transition-all whitespace-nowrap" style="border-color:rgba(200,70,55,0.35);color:#e8a099;background:rgba(200,70,55,0.07);border-width:1px" id="annivRemoveBtn">✕ Remove</button>
           </div>
         </div>
         <!-- Fixed-height photo area so it never shifts layout -->
@@ -122,7 +122,7 @@
           <div class="flex flex-col gap-2 flex-1 min-w-0">
             <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block">Gym Log</span>
             <div class="flex gap-1 flex-1 items-stretch" id="gymWeek"></div>
-            <button class="gym-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all self-stretch" style="background:oklch(88% 0.14 155 / 0.12);border:1px solid oklch(88% 0.14 155 / 0.40);color:oklch(88% 0.14 155)" id="gymLogBtn">I went today! </button>
+            <button class="gym-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all self-stretch" style="background:rgba(110,231,183,0.12);border:1px solid rgba(110,231,183,0.40);color:#6ee7b7" id="gymLogBtn">I went today! </button>
           </div>
           <div class="gym-grad-divider w-px bg-white/10 mx-4 flex-shrink-0 rounded-sm"></div>
           <div class="grad-section flex flex-col items-center justify-center gap-0.5 flex-shrink-0 w-[90px] text-center">
@@ -139,14 +139,14 @@
       <div class="glass-filter"></div><div class="glass-overlay"></div><div class="glass-specular"></div>
       <div class="card-content med-card-content">
         <span class="label uppercase tracking-widest font-mono text-[var(--txt-d)] block flex-shrink-0">Medications</span>
-        <div class="med-refill-banner hidden items-center gap-1.5 rounded-lg px-2.5 py-1.5 flex-shrink-0" style="background:oklch(78% 0.18 80 / 0.15);border:1px solid oklch(78% 0.18 80 / 0.50);color:oklch(78% 0.18 80)" id="medRefillBanner">
+        <div class="med-refill-banner hidden items-center gap-1.5 rounded-lg px-2.5 py-1.5 flex-shrink-0" style="background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.50);color:#fbbf24" id="medRefillBanner">
           <span>Time to refill your pill container!</span>
-          <button class="med-refill-snooze bg-transparent border-none ml-auto opacity-70 cursor-pointer transition-opacity" style="color:oklch(78% 0.18 80)" id="medRefillSnooze" title="Snooze 1 week">✕</button>
+          <button class="med-refill-snooze bg-transparent border-none ml-auto opacity-70 cursor-pointer transition-opacity" style="color:#fbbf24" id="medRefillSnooze" title="Snooze 1 week">✕</button>
         </div>
         <div class="med-week-wrap flex-1 min-h-0 flex items-stretch" id="medWeekWrap">
           <div class="flex gap-1 w-full" id="medWeek"></div>
         </div>
-        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all flex-shrink-0" style="background:oklch(78% 0.14 200 / 0.12);border:1px solid oklch(78% 0.14 200 / 0.40);color:oklch(78% 0.14 200)" id="medTakenBtn">Taken today!</button>
+        <button class="med-btn uppercase tracking-widest font-mono rounded-lg px-2.5 py-1.5 cursor-pointer transition-all flex-shrink-0" style="background:rgba(103,232,249,0.12);border:1px solid rgba(103,232,249,0.40);color:#67e8f9" id="medTakenBtn">Taken today!</button>
       </div>
     </section>
 
@@ -166,7 +166,7 @@
         </div>
         <div class="flex items-center gap-1 flex-shrink-0">
           <button class="music-btn bg-white/[0.08] border border-white/[0.16] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicPrev">⏮</button>
-          <button class="music-btn music-play bg-[oklch(80%_0.13_300/0.15)] border border-[oklch(80%_0.13_300/0.45)] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicPlay">▶</button>
+          <button class="music-btn music-play bg-[rgba(196,181,253,0.15)] border border-[rgba(196,181,253,0.45)] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicPlay">▶</button>
           <button class="music-btn bg-white/[0.08] border border-white/[0.16] rounded-[7px] text-[var(--txt)] cursor-pointer px-1.5 py-1 transition-colors leading-none" id="musicNext">⏭</button>
           <input class="music-vol flex-1 h-[3px] bg-white/10 rounded-full cursor-pointer" id="musicVolume" type="range" min="0" max="1" step="0.05" value="0.8">
           <label class="music-upload font-mono text-[var(--lav)] bg-white/[0.06] border border-white/[0.16] rounded-[7px] px-1.5 py-1 cursor-pointer whitespace-nowrap">＋<input type="file" id="musicUpload" accept="audio/*" multiple class="hidden"></label>
@@ -223,7 +223,7 @@
       <!-- Search + Add -->
       <div class="flex gap-2 mb-4 mt-2">
         <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0" id="libSearchInput" type="text" placeholder="Search for a book to add…"/>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="libSearchBtn">Search 🔍</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="libSearchBtn">Search 🔍</button>
       </div>
       <!-- Search results -->
       <div id="libSearchResults" class="hidden flex flex-col gap-2 mb-4 max-h-[220px] overflow-y-auto"></div>
@@ -259,7 +259,7 @@
             <label class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1">Progress %</label>
             <div class="flex gap-1.5 items-center">
               <input class="mi bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)]" id="bookProgressInput" type="number" min="0" max="100" placeholder="0–100"/>
-              <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer" id="bookProgressSave">Save</button>
+              <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer" id="bookProgressSave">Save</button>
             </div>
           </div>
           <!-- Star rating -->
@@ -274,7 +274,7 @@
       </div>
       <div class="flex gap-1.5 mb-3.5">
         <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0" id="bookAmazonLink" type="url" placeholder="Amazon link (auto-filled or paste)…" readonly/>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="bookLinkOpen">Buy ↗</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0" id="bookLinkOpen">Buy ↗</button>
       </div>
       <div class="bk-summary font-mono text-[var(--txt-d)] leading-relaxed border-t border-white/10 pt-3">
         <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1.5">Summary</span>
@@ -293,7 +293,7 @@
       <div id="calRemindersList"></div>
       <div class="flex gap-1.5 items-center">
         <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0 transition-colors" id="calReminderInput" type="text" placeholder="Quick reminder…"/>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="calAddReminder">Add</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="calAddReminder">Add</button>
       </div>
     </div>
   </div>
@@ -310,12 +310,12 @@
       </div>
       <div class="flex gap-1.5 items-center mb-2">
         <input class="mi flex-1 bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] min-w-0 transition-colors" id="waterOzInput" type="number" min="1" max="200" placeholder="oz just drank…"/>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="waterLogBtn">+ Log</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="waterLogBtn">+ Log</button>
       </div>
       <div class="flex gap-1.5 items-center mb-3.5">
         <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] whitespace-nowrap" style="margin:0">Daily goal (oz)</span>
         <input class="mi bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] transition-colors" id="waterGoalInput" type="number" min="16" max="300" placeholder="64" style="max-width:80px"/>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="waterGoalSave">Save</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap flex-shrink-0 transition-colors" id="waterGoalSave">Save</button>
       </div>
       <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1.5">History</span>
       <div class="flex flex-col gap-1 max-h-[180px] overflow-y-auto mt-1" id="waterHistory"></div>
@@ -340,8 +340,8 @@
       <div class="flex items-center justify-between flex-wrap gap-2 mb-3.5">
         <div class="modal-title font-['Melodrama',serif] text-[var(--txt)]" style="margin-bottom:0">Medications</div>
         <div class="flex flex-col items-end gap-1">
-          <div class="med-refill-info font-mono text-[var(--txt-d)]">Last refill: <span style="color:oklch(78% 0.18 80)" id="medLastRefillDisplay">—</span></div>
-          <button class="med-reset-btn font-mono rounded-[7px] px-2.5 py-1 cursor-pointer transition-colors whitespace-nowrap" style="background:oklch(78% 0.18 80 / 0.12);border:1px solid oklch(78% 0.18 80 / 0.40);color:oklch(78% 0.18 80)" id="medRefillResetBtn">✓ Just refilled</button>
+          <div class="med-refill-info font-mono text-[var(--txt-d)]">Last refill: <span style="color:#fbbf24" id="medLastRefillDisplay">—</span></div>
+          <button class="med-reset-btn font-mono rounded-[7px] px-2.5 py-1 cursor-pointer transition-colors whitespace-nowrap" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.40);color:#fbbf24" id="medRefillResetBtn">✓ Just refilled</button>
         </div>
       </div>
       <span class="sec-label uppercase tracking-widest font-mono text-[var(--txt-d)] block mb-1.5">My Medications</span>
@@ -360,7 +360,7 @@
           </select>
           <input class="mi bg-white/[0.08] border border-white/[0.18] rounded-[9px] px-2.5 py-1.5 font-mono text-[var(--txt)] transition-colors" id="medNotesInput" type="text" placeholder="Notes (optional)…"/>
         </div>
-        <button class="mb bg-[oklch(80%_0.13_300/0.14)] border border-[oklch(80%_0.13_300/0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap transition-colors w-full flex justify-center" id="medAddBtn">+ Add Medication</button>
+        <button class="mb bg-[rgba(196,181,253,0.14)] border border-[rgba(196,181,253,0.38)] rounded-[9px] px-3 py-1.5 font-mono text-[var(--lav)] cursor-pointer whitespace-nowrap transition-colors w-full flex justify-center" id="medAddBtn">+ Add Medication</button>
       </div>
     </div>
   </div>

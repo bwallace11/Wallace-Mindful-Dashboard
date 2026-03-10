@@ -45,7 +45,7 @@ function initGlassInteractivity() {
       const dispMap = document.querySelector('#glassDispMap');
       if (dispMap) dispMap.setAttribute('scale', Math.min(40 + (x/rect.width)*60, 90));
       const spec = this.querySelector('.glass-specular');
-      if (spec) spec.style.background = `radial-gradient(circle at ${x}px ${y}px, oklch(100% 0 0 / 0.18) 0%, oklch(100% 0 0 / 0.06) 35%, oklch(100% 0 0 / 0) 65%)`;
+      if (spec) spec.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 35%, rgba(255,255,255,0) 65%)`;
     });
     card.addEventListener('mouseleave', function() {
       const dispMap = document.querySelector('#glassDispMap');
@@ -256,7 +256,7 @@ $('gymLogBtn').addEventListener('click',e=>{
   week[todayDow]=true; gymData[getWeekKey()]=week; LS.set('pom_gym',gymData);
   buildGymWidget(); buildGymModal();
   const cells=$('gymWeek').querySelectorAll('.gym-cell');
-  if(cells[todayDow]){ cells[todayDow].style.background='oklch(88% 0.14 155 / 0.22)'; setTimeout(()=>cells[todayDow].style.background='',800); }
+  if(cells[todayDow]){ cells[todayDow].style.background='rgba(110,231,183,0.22)'; setTimeout(()=>cells[todayDow].style.background='',800); }
 });
 $('gymCard').addEventListener('click',()=>{ buildGymModal(); $('gymModal').classList.add('open'); });
 $('gymModalClose').addEventListener('click',()=>$('gymModal').classList.remove('open'));
@@ -347,7 +347,7 @@ function updateLibWidget() {
   }
   // Spines
   const spines = $('libSpines'); spines.innerHTML = '';
-  const colors = ['oklch(62% 0.18 25)','oklch(72% 0.14 155)','oklch(65% 0.16 260)','oklch(75% 0.14 90)','oklch(65% 0.18 310)'];
+  const colors = ['#c44d38','#3db87f','#5580d0','#b0a040','#b050a8'];
   libBooks.slice(0,5).forEach((b,i) => {
     const s = document.createElement('div');
     s.className = 'spine w-2.5 h-8 rounded-sm opacity-85 transition-all duration-200';
@@ -653,7 +653,7 @@ $('medTakenBtn').addEventListener('click',e=>{
   e.stopPropagation(); if(isTakenToday()) return;
   medTaken[medTodayKey()]=true; LS.set('pom_med_taken',medTaken); buildMedWidget();
   const cells=$('medWeek').querySelectorAll('.med-cell'), todayDow=new Date().getDay();
-  if(cells[todayDow]){ cells[todayDow].style.background='oklch(78% 0.14 200 / 0.28)'; setTimeout(()=>cells[todayDow].style.background='',900); }
+  if(cells[todayDow]){ cells[todayDow].style.background='rgba(103,232,249,0.28)'; setTimeout(()=>cells[todayDow].style.background='',900); }
 });
 $('medCard').addEventListener('click',()=>{ renderMedList(); updateRefillDisplay(); $('medModal').classList.add('open'); });
 $('medModalClose').addEventListener('click',()=>$('medModal').classList.remove('open'));
